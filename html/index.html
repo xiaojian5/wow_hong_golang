@@ -41,8 +41,8 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>宏文本</th>
+                    <th class="col-md-1">#</th>
+                    <th class="col-md-6">宏文本</th>
                     <th>描述信息</th>
                 </tr>
                 </thead>
@@ -52,6 +52,13 @@
                     <td v-html="item1.text"></td>
                     <td v-html="item1.desc"></td>
                 </tr>
+                <tr v-for="item2 in skillTableOfRemote">
+                    <th scope="row">{{item2.id}}</th>
+                    <td>
+                        <pre>{{item2.text}}</pre>
+                    </td>
+                    <td>{{item2.desc}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -60,5 +67,6 @@
 </div>
 <script src="../js/vue.min.js"></script>
 <script src="../js/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>

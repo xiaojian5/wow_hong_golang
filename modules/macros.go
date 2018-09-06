@@ -2,6 +2,7 @@ package modules
 
 import (
 	"github.com/jmoiron/sqlx"
+	"fmt"
 )
 
 type Macro struct {
@@ -30,6 +31,7 @@ func GetMacroList(macro Macro) []Macro {
 	build.Eq("mastery_id", macro.MasteryID)
 	build.Eq("profession_id", macro.ProfessionID)
 	build.Eq("id", macro.ID)
+	build.Like("macro", fmt.Sprintf("%%%s%%", macro.Macro))
 
 	macros := make([]Macro, 0)
 

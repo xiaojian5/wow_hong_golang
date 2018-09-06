@@ -40,6 +40,7 @@ func getMacroList(c *gin.Context) {
 		ID:           id,
 		ProfessionID: professionId,
 		MasteryID:    masteryId,
+		Macro:        c.DefaultQuery("macro", ""),
 	}
 	result := modules.GetMacroList(macro)
 

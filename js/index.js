@@ -111,12 +111,16 @@ var vue = new Vue({
             ]
         },
         skillTable: [],
+        skillTableOfRemote: [],
     },
     methods: {
         fastCreate: function() {
             console.log(vue.$data.skillType);
             if (vue.$data.skillType !== "0" && vue.$data !== 0) {
+                vue.$data.skillName = vue.$data.skillName.replace(/(^\s*)|(\s*$)/g, "");
                 vue.$data.skillTable = [];//清空
+                vue.$data.skillTableOfRemote = [];
+                var num = 1;
 
                 var skills = vue.$data.skillCondition[vue.$data.skillType];
 
@@ -136,12 +140,35 @@ var vue = new Vue({
                         }
                     }
                     vue.$data.skillTable.push({
-                        "id": 1,
+                        "id": num,
                         "text": "#showtooltip" + text,
                         "desc": "- 【显示技能图标和技能描述】" + desc,
                     });
+                    num++;
                 }
-
+                axios.get('/macros', {
+                    params: {
+                        macro: vue.$data.skillName,
+                    }
+                })
+                    .then(function(response) {
+                        console.log(response);
+                        var len = response.data.length
+                        for (var i = 0; i < len; i++) {
+                            vue.$data.skillTableOfRemote.push({
+                                "id": num,
+                                "text": response.data[i].macro,
+                                "desc": response.data[i].title,
+                            });
+                            num++;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+                    .then(function() {
+                        // always executed
+                    });
             } else {
                 alert("请选择技能类型")
             }

@@ -75,6 +75,20 @@ func (build *BuildSql) Eq(fieldName string, fieldValue interface{}) {
 	}
 }
 
+// 构建where语句
+func (build *BuildSql) Like(fieldName string, fieldValue interface{}) {
+	if fieldValue == "" || fieldValue == 0 {
+
+	} else {
+		if build.WhereStr == "" {
+			build.WhereStr = fmt.Sprintf("WHERE %s LIKE ?", fieldName)
+		} else {
+			build.WhereStr = fmt.Sprintf("%s AND %s LIKE ?", build.WhereStr, fieldName)
+		}
+		build.Args = append(build.Args, fieldValue)
+	}
+}
+
 // 构建update语句
 func (build *BuildSql) Set(fieldName string, fieldValue interface{}) {
 	if build.Type != SQL_TYPE_UPDATE {
