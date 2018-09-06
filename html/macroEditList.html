@@ -1,0 +1,70 @@
+<div class="container">
+    <style>
+        .form-control2{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            margin-bottom: 10px;
+        }
+    </style>
+    <div id="macrolist" class="col-sm-12">
+        <div class="form-group col-sm-12 clearfix">
+            <label for="profession" class="col-xs-12 col-sm-12 col-md-3">选择宏所属职业、专精：</label>
+            <select class="form-control2 col-xs-12 col-sm-12 col-md-2 col-lg-2" id="profession" name="profession_id" style="margin-left: 5px;">
+                <option value="-1">
+                    全部
+                </option>
+                <option v-for="item in professions" v-bind:value="item.id">
+                    {{item.name}}
+                </option>
+            </select>
+            <select id="verify" name="verify" class="form-control2 col-xs-12 col-sm-12 col-md-2 col-lg-2" style="margin-left: 5px;">
+                <option value="-1">全部</option>
+                <option value="1">审核通过</option>
+                <option value="0" selected>未审核</option>
+            </select>
+            <button type="button" class="btn btn-success col-xs-12 col-sm-12 col-md-1 margin_bottom"  v-on:click="search" style="margin-left: 10px;">查询</button>
+        </div>
+        <div class="form-group col-sm-12">
+            <table class="table table-striped col-sm-12">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1 hidden-xs hidden-sm">状态</th>
+                        <th class="col-sm-2 hidden-xs hidden-sm">作者</th>
+                        <th class="col-sm-3 hidden-xs">标题</th>
+                        <th class="col-sm-6">宏模板</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(selectmacro, key) in macros" :id="'tr_macro_'+selectmacro.id">
+                        <td class="hidden-xs hidden-sm"><input :id="'verify_'+selectmacro.id" type="text" v-bind:value="selectmacro.is_verify"/></td>
+                        <td class="hidden-xs hidden-sm"><input :id="'author_'+selectmacro.id" type="text" v-bind:value="selectmacro.author"/></td>
+                        <td class="hidden-xs"><textarea :id="'title_'+selectmacro.id" class="form-control" rows="4">{{selectmacro.title}}</textarea></td>
+                        <td>
+                            <textarea :id="'macro_'+selectmacro.id" class="form-control" rows="7">{{selectmacro.macro}}</textarea>
+                        </td>
+                        <td><button class="btn btn-default" v-on:click="update" v-bind:flag="selectmacro.id">修改</button><button class="btn btn-default" v-bind:flag="selectmacro.id" v-bind:flag1="key" v-on:click="deleteMacro(selectmacro,$event)">删除</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br><br><br>
+<?php include './html/footer.html'; ?>
+<script src="./js/macroEditList.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>宏工具-快速创建</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+</head>
+<body>
+<div class="container" id="fast-create">
+    <div class="row">
+        <div class="bs-example" data-example-id="simple-nav-justified">
+            <ul class="nav nav-tabs nav-justified">
+                <li role="presentation"><a href="./index.html">快速创建</a></li>
+                <li role="presentation"><a href="./macroIndex.html">自己组合条件</a></li>
+                <li role="presentation"><a href="./addMacro.html">分享一条宏</a></li>
+                <li role="presentation" class="active"><a href="./macroList.html">搜索同伴分享的宏</a></li>
+            </ul>
+        </div>
+    </div>
+    <br> <br>
+    <style>
+        .form-control2{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            margin-bottom: 10px;
+        }
+    </style>
+    <div id="macrolist" class="col-sm-12 clearfix">
+        <div class="form-group col-sm-12 clearfix">
+            <label for="profession" class="col-xs-12 col-sm-12 col-md-3">选择宏所属职业、专精：</label>
+            <select class="form-control2 col-xs-12 col-sm-12 col-md-2 col-lg-2" id="profession" name="profession_id" v-model="select_pid" style="margin-left: 10px;">
+                <option value="">
+                    请选择
+                </option>
+                <option v-for="item in professions" v-bind:value="item.id">
+                    {{item.name}}
+                </option>
+            </select>
+            <button type="button" class="btn btn-success col-xs-12 col-sm-12 col-md-1 margin_bottom"  v-on:click="search" style="margin-left: 10px;">查询</button>
+        </div>
+        <div class="form-group col-sm-12 clearfix">
+            <select class="form-control2 col-xs-12 col-sm-12 col-md-12" id="macro_id" name="macro_id" v-on:change="changeMacro" style="margin-left: 10px;">
+                <option id="first_macro" value="">
+                    空
+                </option>
+                <option v-for="macro in macros" v-bind:value="macro.id">
+                    {{macro.title}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-sm-12">
+            <table class="table table-striped col-sm-12">
+                <thead>
+                    <tr>
+                        <th class="col-sm-2 hidden-xs hidden-sm">作者</th>
+                        <th class="col-sm-2 hidden-xs">标题</th>
+                        <th class="col-sm-7">宏模板</th>
+                        <th class="hidden-xs hidden-sm hidden-md">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-show="select_macro">
+                        <td class="hidden-xs hidden-sm">{{select_macro.author}}</td>
+                        <td class="hidden-xs">{{select_macro.title}}</td>
+                        <td>
+                            <p class="visible-xs">作者：{{select_macro.author}}</p>
+                            <p class="visible-xs">标题：{{select_macro.title}}</p>
+                            <textarea class="form-control" rows="13" id="macro_text">{{select_macro.macro}}</textarea><br>
+                            <button class="btn btn-default visible-xs visible-sm" v-on:click="copyMacro">复制</button>
+                        </td>
+                        <td class="hidden-xs hidden-sm"><button class="btn btn-default" v-on:click="copyMacro">复制</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br><br><br>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="../js/macroList.js"></script>
+</body>
+</html>
