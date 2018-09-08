@@ -2,7 +2,7 @@ package modules
 
 import (
 	"github.com/jmoiron/sqlx"
-	"fmt"
+	sql "github.com/illidan33/sql-builder"
 )
 
 type Macro struct {
@@ -25,17 +25,25 @@ type Macro struct {
 
 // 获取模板列表
 func GetMacroList(macro Macro) []Macro {
-	var build BuildSql
-	build.Init("macros", SQL_TYPE_SELECT)
+	var build sql.SqlBuilder
+	build.Init("macros", sql.SQL_TYPE_SELECT)
 
-	build.Eq("mastery_id", macro.MasteryID)
-	build.Eq("profession_id", macro.ProfessionID)
-	build.Eq("id", macro.ID)
-	build.Like("macro", fmt.Sprintf("%%%s%%", macro.Macro))
+	if macro.MasteryID != 0 {
+		build.Where("mastery_id", sql.WHERE_TYPE_EQ, macro.MasteryID)
+	}
+	if macro.ProfessionID != 0 {
+		build.Where("profession_id", sql.WHERE_TYPE_EQ, macro.ProfessionID)
+	}
+	if macro.ID != 0 {
+		build.Where("id", sql.WHERE_TYPE_EQ, macro.ID)
+	}
+	if macro.Macro != "" {
+		build.Where("macro", sql.WHERE_TYPE_Like, macro.Macro)
+	}
 
 	macros := make([]Macro, 0)
 
-	rows, err := DbConn.Query(build.String(), build.Args...)
+	rows, err := DbConn.Query(build.String(), build.Args()...)
 	CheckErr("GetMacroList", err)
 
 	sqlx.StructScan(rows, &macros)
@@ -43,9 +51,9 @@ func GetMacroList(macro Macro) []Macro {
 }
 
 func CreateMacro(macro Macro) bool {
-	var build BuildSql
-	build.Init("macros", SQL_TYPE_INSERT)
-	build.Insert(macro)
+	var build sql.SqlBuilder
+	build.Init("macros", sql.SQL_TYPE_INSERT)
+	build.InsertByStruct(macro)
 
 	tx, err := DbConn.Begin()
 	if err != nil {
@@ -55,7 +63,7 @@ func CreateMacro(macro Macro) bool {
 	defer tx.Rollback()
 
 	stmt, err := tx.Prepare(build.String())
-	_, err = stmt.Exec(build.Args...)
+	_, err = stmt.Exec(build.Args()...)
 	if err != nil {
 		tx.Rollback()
 		CheckErr("CreateMacro exec", err)
@@ -71,9 +79,9 @@ func CreateMacro(macro Macro) bool {
 }
 
 func UpdateMacro(macro Macro) bool {
-	var build BuildSql
-	build.Init("macros", SQL_TYPE_UPDATE)
-	build.Update(macro)
+	var build sql.SqlBuilder
+	build.Init("macros", sql.SQL_TYPE_UPDATE)
+	build.UpdateByStruct(macro, true)
 
 	tx, err := DbConn.Beginx()
 	if err != nil {
@@ -81,7 +89,7 @@ func UpdateMacro(macro Macro) bool {
 		return false
 	}
 
-	_, err = tx.Exec(build.String(), build.Args...)
+	_, err = tx.Exec(build.String(), build.Args()...)
 	if err != nil {
 		tx.Rollback()
 		CheckErr("CreateMacro exec", err)

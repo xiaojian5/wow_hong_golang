@@ -10,10 +10,25 @@ import (
 	"encoding/json"
 	"time"
 	"fmt"
+	"flag"
+	"log"
+)
+
+var (
+	port int
 )
 
 func main() {
-	//gin.SetMode(gin.ReleaseMode)
+	defer func() {
+		if err := recover(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	flag.IntVar(&port, "port", 8000, "listen port")
+	flag.Parse()
+
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	// 设置静态资源
@@ -24,8 +39,11 @@ func main() {
 
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
+	router.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/html")
+	})
 
-	router.Run(":8000")
+	router.Run(fmt.Sprintf(":%d", port))
 }
 
 func getMacroList(c *gin.Context) {
@@ -51,14 +69,12 @@ func CreateMacro(c *gin.Context) {
 	macro := modules.Macro{}
 
 	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Fprintf(gin.DefaultWriter, "%s\n", string(body))
 	err := json.Unmarshal(body, &macro)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{})
 	}
 
 	macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
-	fmt.Fprintf(gin.DefaultWriter, "%+v\n", macro)
 	result := modules.CreateMacro(macro)
 	if result == true {
 		c.JSON(http.StatusOK, gin.H{})
