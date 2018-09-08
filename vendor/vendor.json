@@ -45,6 +45,12 @@
 			"revisionTime": "2018-08-21T05:17:52Z"
 		},
 		{
+			"checksumSHA1": "IGfDhwi2VxeLy9EpY6XPdDsJ0LY=",
+			"path": "github.com/illidan33/sql-builder",
+			"revision": "41c61c2ce6c865652216b91453eca8a76e05bbfc",
+			"revisionTime": "2018-09-08T10:36:40Z"
+		},
+		{
 			"checksumSHA1": "F45m6rdNc9pgzu5vWN1n1Rwbk4A=",
 			"path": "github.com/jmoiron/sqlx",
 			"revision": "0dae4fefe7c0e190f7b5a78dac28a1c82cc8d849",
@@ -104,5 +110,5 @@
 			"revisionTime": "2018-03-28T19:50:20Z"
 		}
 	],
-	"rootPath": "gotest/gin_test"
+	"rootPath": "gotest/wow_hong_golang"
 }
