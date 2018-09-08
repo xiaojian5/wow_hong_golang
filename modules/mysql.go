@@ -12,7 +12,7 @@ var DbConn *sqlx.DB
 
 func init() {
 	var err error
-	DbConn, err = sqlx.Open("mysql", "root:xiaohu@tcp(127.0.0.1:3306)/wow_hong?charset=utf8")
+	DbConn, err = sqlx.Open("mysql", "test:test@tcp(127.0.0.1:3306)/wow_hong?charset=utf8")
 	if err != nil {
 		log.Fatalf("connect error: %s", err.Error())
 		os.Exit(0)

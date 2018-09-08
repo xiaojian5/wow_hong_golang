@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"gotest/wow_hong_golang/modules"
+	"wow_hong_golang/modules"
 	"net/http"
 	"strconv"
 	"io/ioutil"
