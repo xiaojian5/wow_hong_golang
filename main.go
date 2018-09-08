@@ -40,6 +40,14 @@ func main() {
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
 	router.GET("/", func(c *gin.Context) {
+		ip := c.ClientIP()
+		loginLog := modules.LoginLog{
+			IP:         ip,
+			Method:     "index",
+			CreateTime: time.Now().Format("2006-01-02 15:04:05"),
+		}
+		modules.CreateLog(loginLog)
+
 		c.Redirect(http.StatusMovedPermanently, "/html")
 	})
 
