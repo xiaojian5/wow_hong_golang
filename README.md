@@ -17,5 +17,5 @@
 
 # Install
 ```
-go get -u github.com/illidan33/sql-builder
+go get -u github.com/illidan33/wow_hong_golang
 ```
