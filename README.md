@@ -19,3 +19,8 @@
 ```
 go get -u github.com/illidan33/wow_hong_golang
 ```
+# 优化
+  由于服务器能力的问题，为了优化访问，所做的更改
+1. 把部分数据写死在html中，以减少客户端访问次数，提高服务器处理能力。
+2. bootstrap/vue.js/axios.js 等，采用官网cdn，加速访问速度。
+3. 使用supervisor监控服务进程，自动管理，防止程序退出，无法访问。
