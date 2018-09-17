@@ -29,10 +29,10 @@ const (
 	WHERE_TYPE_LikeAFT                  // % after Like
 )
 
-type SqlBuilder struct {
-	// table name
+type sqlBuilder struct {
+	// 表名/table name
 	table string
-	// select fields
+	// 查询字段/select fields
 	fields string
 	// sql type
 	sqlType SqlType
@@ -40,23 +40,27 @@ type SqlBuilder struct {
 	handleStr string
 	// where conditions
 	whereStr string
-	// sql flag
+	// 占位符/sql flag
 	flag string
 	// args for db.Exec
 	args []interface{}
 }
 
+type whereBuilder struct {
+	sqlBuilder
+}
+
 type SelectSqlBuilder struct {
-	SqlBuilder
+	whereBuilder
 }
 type UpdateSqlBuilder struct {
-	SqlBuilder
+	whereBuilder
 }
 type InsertSqlBuilder struct {
-	SqlBuilder
+	sqlBuilder
 }
 type DeleteSqlBuilder struct {
-	SqlBuilder
+	whereBuilder
 }
 
 // struct for build sql string of 'or'
@@ -102,7 +106,7 @@ func Delete(tableName string) *DeleteSqlBuilder {
 }
 
 // init
-func (build *SqlBuilder) init(tableName string, sqlType SqlType) *SqlBuilder {
+func (build *sqlBuilder) init(tableName string, sqlType SqlType) *sqlBuilder {
 	build.sqlType = sqlType
 	build.table = tableName
 	build.flag = "?"
@@ -221,52 +225,52 @@ func (build *SelectSqlBuilder) SelectByStruct(tableMap interface{}, skipEmpty bo
 }
 
 // Build sql string of 'where' with '='
-func (build *SqlBuilder) WhereEq(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereEq(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_EQ, fieldValue)
 }
 
 // Build sql string of 'where' with '<>'
-func (build *SqlBuilder) WhereNeq(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereNeq(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_NEQ, fieldValue)
 }
 
 // Build sql string of 'where' with '>'
-func (build *SqlBuilder) WhereGt(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereGt(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_GT, fieldValue)
 }
 
 // Build sql string of 'where' with '>='
-func (build *SqlBuilder) WhereGte(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereGte(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_GTE, fieldValue)
 }
 
 // Build sql string of 'where' with '<'
-func (build *SqlBuilder) WhereLt(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereLt(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_LT, fieldValue)
 }
 
 // Build sql string of 'where' with '<='
-func (build *SqlBuilder) WhereLte(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereLte(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_LTE, fieldValue)
 }
 
 // Build sql string of 'where' with 'like'
-func (build *SqlBuilder) WhereLike(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereLike(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_Like, fieldValue)
 }
 
 // Build sql string of 'where' with 'like'
-func (build *SqlBuilder) WhereLikeBefore(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereLikeBefore(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_LikeBEF, fieldValue)
 }
 
 // Build sql string of 'where' with 'like'
-func (build *SqlBuilder) WhereLikeAfter(fieldName string, fieldValue interface{}) {
+func (build *whereBuilder) WhereLikeAfter(fieldName string, fieldValue interface{}) {
 	build.buildWhereCondition(fieldName, WHERE_TYPE_LikeAFT, fieldValue)
 }
 
 // Build sql string of 'in' condition with conditions
-func (build *SqlBuilder) WhereIn(fieldName string, args []interface{}) {
+func (build *whereBuilder) WhereIn(fieldName string, args []interface{}) {
 	length := len(args)
 	if length < 1 {
 		log.Fatalf("Need args")
@@ -293,7 +297,7 @@ func (build *SqlBuilder) WhereIn(fieldName string, args []interface{}) {
 }
 
 // Build sql string of 'or' condition with struct WhereOrCondition
-func (build *SqlBuilder) WhereOr(args []WhereOrCondition) {
+func (build *whereBuilder) WhereOr(args []WhereOrCondition) {
 	var orStr string
 	for _, value := range args {
 		condition := getWhereTypeString(value.WhereType)
@@ -312,7 +316,7 @@ func (build *SqlBuilder) WhereOr(args []WhereOrCondition) {
 			break
 		}
 
-		conditionStr := fmt.Sprintf("%s%s%s", value.FieldName, condition, build.flag)
+		conditionStr := fmt.Sprintf("`%s`%s%s", value.FieldName, condition, build.flag)
 		if orStr == "" {
 			orStr = conditionStr
 		} else {
@@ -324,12 +328,12 @@ func (build *SqlBuilder) WhereOr(args []WhereOrCondition) {
 	if build.whereStr == "" {
 		build.whereStr = orStr
 	} else {
-		build.whereStr = fmt.Sprintf("%s OR (%s)", build.whereStr, orStr)
+		build.whereStr = fmt.Sprintf("(%s) OR (%s)", build.whereStr, orStr)
 	}
 }
 
 // Build sql string with struct, whick has tag "db"
-func (build *SqlBuilder) WhereByStruct(tableMap interface{}, skipEmpty bool) {
+func (build *whereBuilder) WhereByStruct(tableMap interface{}, skipEmpty bool) {
 	tableType := reflect.TypeOf(tableMap)
 	valueType := reflect.ValueOf(tableMap)
 
@@ -350,7 +354,7 @@ func (build *SqlBuilder) WhereByStruct(tableMap interface{}, skipEmpty bool) {
 }
 
 // Get sql string
-func (build *SqlBuilder) String() string {
+func (build *sqlBuilder) String() string {
 	whereStr := ""
 	if build.whereStr != "" {
 		whereStr = fmt.Sprintf(" WHERE %s", build.whereStr)
@@ -369,12 +373,12 @@ func (build *SqlBuilder) String() string {
 }
 
 // Get all Args
-func (build *SqlBuilder) Args() []interface{} {
+func (build *sqlBuilder) Args() []interface{} {
 	return build.args
 }
 
 // Set sql flag
-func (build *SqlBuilder) SetFlag(flag string) {
+func (build *sqlBuilder) SetFlag(flag string) {
 	build.flag = flag
 }
 
@@ -383,8 +387,20 @@ func (build *SelectSqlBuilder) SetSearchFields(selectField string) {
 	build.fields = selectField
 }
 
+func (build *SelectSqlBuilder) Limit(offset int64, size int64) {
+	build.whereStr = fmt.Sprintf("%s LIMIT %d,%d", build.whereStr, offset, size)
+}
+
+func (build *SelectSqlBuilder) GroupBy(fieldName string) {
+	build.whereStr = fmt.Sprintf("%s GROUP BY %s", build.whereStr, fieldName)
+}
+
+func (build *SelectSqlBuilder) OrderBy(orderBy string) {
+	build.whereStr = fmt.Sprintf("%s ORDER BY %s", build.whereStr, orderBy)
+}
+
 // Build condition string
-func (build *SqlBuilder) buildWhereCondition(fieldName string, whereType WhereType, fieldValue interface{}) {
+func (build *whereBuilder) buildWhereCondition(fieldName string, whereType WhereType, fieldValue interface{}) {
 	if whereType == WHERE_TYPE {
 		log.Fatalf("Where type error")
 	}
