@@ -45,10 +45,10 @@
 			"revisionTime": "2018-08-21T05:17:52Z"
 		},
 		{
-			"checksumSHA1": "IGfDhwi2VxeLy9EpY6XPdDsJ0LY=",
+			"checksumSHA1": "oovh9/D+vC0DVMqqZwbTbRf59pE=",
 			"path": "github.com/illidan33/sql-builder",
-			"revision": "41c61c2ce6c865652216b91453eca8a76e05bbfc",
-			"revisionTime": "2018-09-08T10:36:40Z"
+			"revision": "69ff61433aa0332c930cabc79de0dc7bf61d3cbc",
+			"revisionTime": "2018-09-17T07:04:26Z"
 		},
 		{
 			"checksumSHA1": "F45m6rdNc9pgzu5vWN1n1Rwbk4A=",
@@ -75,7 +75,7 @@
 			"revisionTime": "2018-05-23T07:42:43Z"
 		},
 		{
-			"checksumSHA1": "s/kG3fL3C8puCzkyfmOgwC9gWUY=",
+			"checksumSHA1": "jgDMimrLzsAISgHJL7Q9QwGQ0H0=",
 			"path": "github.com/ugorji/go/codec",
 			"revision": "aa28833c9f9fa49a39beb6969d0651ef6e488290",
 			"revisionTime": "2018-08-29T16:56:55Z"
@@ -87,7 +87,7 @@
 			"revisionTime": "2016-01-07T02:14:22Z"
 		},
 		{
-			"checksumSHA1": "DL86dD0CNBnjMxK1FuWRO+2gAHI=",
+			"checksumSHA1": "lrstOnXDvotcdyZAl07tTjLI6m4=",
 			"path": "golang.org/x/sys/unix",
 			"revision": "753144271b444787650750f626cc62831f63bc9c",
 			"revisionTime": "2016-01-07T02:14:22Z"
@@ -110,5 +110,5 @@
 			"revisionTime": "2018-03-28T19:50:20Z"
 		}
 	],
-	"rootPath": "gotest/wow_hong_golang"
+	"rootPath": "wow_hong_golang"
 }

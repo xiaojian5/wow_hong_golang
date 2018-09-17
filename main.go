@@ -36,19 +36,22 @@ func main() {
 	router.Static("/css", "css")
 	router.Static("/html", "html")
 	router.StaticFile("/favicon.ico", "./favicon.ico")
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status": 404,
+			"error":  "404, page not exists!",
+		})
+	})
 
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
+	router.PUT("/macros", UpdateMacro)
 	router.GET("/", func(c *gin.Context) {
+		// 记录日志
 		ip := c.ClientIP()
-		loginLog := modules.LoginLog{
-			IP:         ip,
-			Method:     "index",
-			CreateTime: time.Now().Format("2006-01-02 15:04:05"),
-		}
-		modules.CreateLog(loginLog)
+		modules.CreateLog(ip, "index")
 
-		c.Redirect(http.StatusMovedPermanently, "/html")
+		c.Redirect(http.StatusMovedPermanently, "/html/")
 	})
 
 	router.Run(fmt.Sprintf(":%d", port))
@@ -84,6 +87,24 @@ func CreateMacro(c *gin.Context) {
 
 	macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
 	result := modules.CreateMacro(macro)
+	if result == true {
+		c.JSON(http.StatusOK, gin.H{})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+}
+
+func UpdateMacro(c *gin.Context) {
+	macro := modules.Macro{}
+
+	body, _ := ioutil.ReadAll(c.Request.Body)
+	err := json.Unmarshal(body, &macro)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+
+	macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
+	result := modules.UpdateMacro(macro)
 	if result == true {
 		c.JSON(http.StatusOK, gin.H{})
 	} else {

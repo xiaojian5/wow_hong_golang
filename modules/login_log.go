@@ -1,6 +1,9 @@
 package modules
 
-import "github.com/illidan33/sql-builder"
+import (
+	"github.com/illidan33/sql-builder"
+	"time"
+)
 
 type LoginLog struct {
 	// 访问IP
@@ -12,15 +15,19 @@ type LoginLog struct {
 }
 
 // 创建登录日志
-func CreateLog(log LoginLog) bool {
-	var build sql_builder.SqlBuilder
-	build.Init("login_log", sql_builder.SQL_TYPE_INSERT)
-	build.InsertByStruct(log)
+func CreateLog(ip string, method string) bool {
+	log := LoginLog{
+		IP:         ip,
+		Method:     method,
+		CreateTime: time.Now().Format("2006-01-02 15:04:05"),
+	}
+	builder := sql_builder.Insert("login_log")
+	builder.InsertByStruct(log)
 
-	res, err := DbConn.Exec(build.String(), build.Args()...)
+	res, err := DbConn.Exec(builder.String(), builder.Args()...)
 	rowNum, err := res.RowsAffected()
 	if err != nil {
-		CheckErr(build.String(), err)
+		CheckErr(builder.String(), err)
 		return false
 	}
 

@@ -152,7 +152,7 @@ var vue = new Vue({
                     }
                 })
                     .then(function(response) {
-                        console.log(response);
+                        // console.log(response);
                         var len = response.data.length
                         for (var i = 0; i < len; i++) {
                             vue.$data.skillTableOfRemote.push({

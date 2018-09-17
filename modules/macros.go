@@ -25,25 +25,24 @@ type Macro struct {
 
 // 获取模板列表
 func GetMacroList(macro Macro) []Macro {
-	var build sql.SqlBuilder
-	build.Init("macros", sql.SQL_TYPE_SELECT)
+	builder := sql.Select("macros")
 
 	if macro.MasteryID != 0 {
-		build.Where("mastery_id", sql.WHERE_TYPE_EQ, macro.MasteryID)
+		builder.WhereEq("mastery_id", macro.MasteryID)
 	}
 	if macro.ProfessionID != 0 {
-		build.Where("profession_id", sql.WHERE_TYPE_EQ, macro.ProfessionID)
+		builder.WhereEq("profession_id", macro.ProfessionID)
 	}
 	if macro.ID != 0 {
-		build.Where("id", sql.WHERE_TYPE_EQ, macro.ID)
+		builder.WhereEq("id", macro.ID)
 	}
 	if macro.Macro != "" {
-		build.Where("macro", sql.WHERE_TYPE_Like, macro.Macro)
+		builder.WhereLike("macro", macro.Macro)
 	}
 
 	macros := make([]Macro, 0)
 
-	rows, err := DbConn.Query(build.String(), build.Args()...)
+	rows, err := DbConn.Query(builder.String(), builder.Args()...)
 	CheckErr("GetMacroList", err)
 
 	sqlx.StructScan(rows, &macros)
@@ -51,9 +50,8 @@ func GetMacroList(macro Macro) []Macro {
 }
 
 func CreateMacro(macro Macro) bool {
-	var build sql.SqlBuilder
-	build.Init("macros", sql.SQL_TYPE_INSERT)
-	build.InsertByStruct(macro)
+	builder := sql.Insert("macros")
+	builder.InsertByStruct(macro)
 
 	tx, err := DbConn.Begin()
 	if err != nil {
@@ -62,8 +60,8 @@ func CreateMacro(macro Macro) bool {
 	}
 	defer tx.Rollback()
 
-	stmt, err := tx.Prepare(build.String())
-	_, err = stmt.Exec(build.Args()...)
+	stmt, err := tx.Prepare(builder.String())
+	_, err = stmt.Exec(builder.Args()...)
 	if err != nil {
 		tx.Rollback()
 		CheckErr("CreateMacro exec", err)
@@ -79,9 +77,8 @@ func CreateMacro(macro Macro) bool {
 }
 
 func UpdateMacro(macro Macro) bool {
-	var build sql.SqlBuilder
-	build.Init("macros", sql.SQL_TYPE_UPDATE)
-	build.UpdateByStruct(macro, true)
+	builder := sql.Update("macros")
+	builder.UpdateByStruct(macro, true)
 
 	tx, err := DbConn.Beginx()
 	if err != nil {
@@ -89,7 +86,7 @@ func UpdateMacro(macro Macro) bool {
 		return false
 	}
 
-	_, err = tx.Exec(build.String(), build.Args()...)
+	_, err = tx.Exec(builder.String(), builder.Args()...)
 	if err != nil {
 		tx.Rollback()
 		CheckErr("CreateMacro exec", err)
