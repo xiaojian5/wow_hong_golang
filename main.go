@@ -46,12 +46,9 @@ func main() {
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
 	router.PUT("/macros", UpdateMacro)
+	router.POST("/log", CreateLoginLog)
 	router.GET("/", func(c *gin.Context) {
-		// 记录日志
-		ip := c.ClientIP()
-		modules.CreateLog(ip, "index")
-
-		c.Redirect(http.StatusMovedPermanently, "/html/")
+		c.Redirect(http.StatusMovedPermanently, "/html/index.html")
 	})
 
 	router.Run(fmt.Sprintf(":%d", port))
@@ -64,12 +61,15 @@ func getMacroList(c *gin.Context) {
 	modules.CheckErr("professionId", err)
 	masteryId, err := strconv.Atoi(c.DefaultQuery("masteryId", "0"))
 	modules.CheckErr("masteryId", err)
+	isVerify, err := strconv.Atoi(c.DefaultQuery("isVerify", "1"))
+	modules.CheckErr("isVerify", err)
 
 	macro := modules.Macro{
 		ID:           id,
 		ProfessionID: professionId,
 		MasteryID:    masteryId,
 		Macro:        c.DefaultQuery("macro", ""),
+		IsVerify:     int8(isVerify),
 	}
 	result := modules.GetMacroList(macro)
 
@@ -83,31 +83,43 @@ func CreateMacro(c *gin.Context) {
 	err := json.Unmarshal(body, &macro)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{})
-	}
-
-	macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
-	result := modules.CreateMacro(macro)
-	if result == true {
-		c.JSON(http.StatusOK, gin.H{})
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{})
+		macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
+		macro.IsVerify = 2
+
+		result := modules.CreateMacro(macro)
+		if result == true {
+			c.JSON(http.StatusOK, gin.H{})
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{})
+		}
 	}
 }
 
 func UpdateMacro(c *gin.Context) {
-	macro := modules.Macro{}
+	id, err := strconv.Atoi(c.DefaultQuery("id", "0"))
+	modules.CheckErr("id", err)
+	isVerify, err := strconv.Atoi(c.DefaultQuery("isVerify", "1"))
+	modules.CheckErr("isVerify", err)
 
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	err := json.Unmarshal(body, &macro)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{})
+	macro := modules.Macro{
+		ID:         id,
+		Title:      c.DefaultQuery("title", ""),
+		Macro:      c.DefaultQuery("macro", ""),
+		UpdateTime: time.Now().Format("2006-01-02 15:04:05"),
+		Author:     c.DefaultQuery("author", ""),
+		IsVerify:   int8(isVerify),
 	}
 
-	macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
-	result := modules.UpdateMacro(macro)
-	if result == true {
-		c.JSON(http.StatusOK, gin.H{})
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{})
-	}
+	result := modules.UpdateMacroByID(macro, macro.ID)
+	c.JSON(http.StatusOK, gin.H{"result": result,})
+}
+
+func CreateLoginLog(c *gin.Context) {
+	method := c.DefaultQuery("method", "index")
+	// 记录日志
+	ip := c.ClientIP()
+	go modules.CreateLog(ip, method)
+
+	c.JSON(http.StatusOK, gin.H{})
 }

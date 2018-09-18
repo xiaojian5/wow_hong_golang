@@ -25,19 +25,13 @@ type Macro struct {
 
 // 获取模板列表
 func GetMacroList(macro Macro) []Macro {
-	builder := sql.Select("macros")
+	macroText := macro.Macro
+	macro.Macro = "" // WhereByStruct跳过macro的条件
 
-	if macro.MasteryID != 0 {
-		builder.WhereEq("mastery_id", macro.MasteryID)
-	}
-	if macro.ProfessionID != 0 {
-		builder.WhereEq("profession_id", macro.ProfessionID)
-	}
-	if macro.ID != 0 {
-		builder.WhereEq("id", macro.ID)
-	}
-	if macro.Macro != "" {
-		builder.WhereLike("macro", macro.Macro)
+	builder := sql.Select("macros")
+	builder.WhereByStruct(macro, true)
+	if macroText != "" {
+		builder.WhereLike("macro", macroText)
 	}
 
 	macros := make([]Macro, 0)
@@ -76,9 +70,10 @@ func CreateMacro(macro Macro) bool {
 	return true
 }
 
-func UpdateMacro(macro Macro) bool {
+func UpdateMacroByID(macro Macro, id int) bool {
 	builder := sql.Update("macros")
 	builder.UpdateByStruct(macro, true)
+	builder.WhereEq("id", id)
 
 	tx, err := DbConn.Beginx()
 	if err != nil {

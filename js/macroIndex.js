@@ -81,9 +81,9 @@ var vue = new Vue({
 
             var con = document.getElementById("condition");
             if (val.type === '1') {
-                con.show();
+                con.style.display = "none";
             } else {
-                con.hide();
+                con.style.display = "block";
             }
         }
     },
