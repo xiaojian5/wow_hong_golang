@@ -29,7 +29,7 @@ var vue = new Vue({
             }
             vue.$data.select_macro = [];
             vue.$data.macros = [];
-            document.getElementById("first_macro").innerHTML= "请选择一条宏模板";
+            document.getElementById("first_macro").innerHTML = "请选择一条宏模板";
 
             axios.get('/macros', {
                 params: {
@@ -74,4 +74,13 @@ var vue = new Vue({
             alert("已复制^-^！");
         }
     },
+    created: function() {
+        axios.post('/log/macroList', {})
+            .then(function(response) {
+                // console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
 });

@@ -63,4 +63,14 @@ var vue = new Vue({
                 });
         }
     },
+    created: function() {
+        axios.post('/log/edit', {
+        })
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
 })

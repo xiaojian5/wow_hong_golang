@@ -165,17 +165,22 @@ var vue = new Vue({
                     })
                     .catch(function(error) {
                         console.log(error);
-                    })
-                    .then(function() {
-                        // always executed
                     });
             } else {
                 alert("请选择技能类型")
             }
         }
     },
-    computed: {},
+    computed: {
+    },
     created: function() {
-        console.log("create");
+        axios.post('/log/index', {
+        })
+            .then(function(response) {
+                // console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     }
 });

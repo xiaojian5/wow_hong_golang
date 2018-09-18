@@ -79,4 +79,14 @@ var vue = new Vue({
             return [];
         }
     },
+    created: function() {
+        axios.post('/log/addMacro', {
+        })
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
 });

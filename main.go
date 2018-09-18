@@ -28,7 +28,7 @@ func main() {
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
 
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	// 设置静态资源
@@ -46,7 +46,7 @@ func main() {
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
 	router.PUT("/macros", UpdateMacro)
-	router.POST("/log", CreateLoginLog)
+	router.POST("/log/:method", CreateLoginLog)
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/html/index.html")
 	})
@@ -116,7 +116,7 @@ func UpdateMacro(c *gin.Context) {
 }
 
 func CreateLoginLog(c *gin.Context) {
-	method := c.DefaultQuery("method", "index")
+	method := c.Param("method")
 	// 记录日志
 	ip := c.ClientIP()
 	go modules.CreateLog(ip, method)

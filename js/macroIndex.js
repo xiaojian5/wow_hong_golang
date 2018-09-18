@@ -88,5 +88,14 @@ var vue = new Vue({
         }
     },
     computed: {},
-    created: function() {}
+    created: function() {
+        axios.post('/log/macroIndex', {
+        })
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
 });
