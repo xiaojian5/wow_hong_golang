@@ -20,7 +20,7 @@ type Macro struct {
 	// 职业
 	ProfessionID int `json:"professionId" db:"profession_id"`
 	// 是否通过审核
-	IsVerify int8 `json:"isVerify" db:"is_verify"`
+	IsVerify int `json:"isVerify" db:"is_verify"`
 }
 
 // 获取模板列表

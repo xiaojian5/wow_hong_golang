@@ -131,7 +131,8 @@ func (build *UpdateSqlBuilder) UpdateByStruct(tableMap interface{}, skipEmpty bo
 	for i := 0; i < num; i++ {
 		dbTag := tableType.Field(i).Tag.Get("db")
 		if dbTag == "" {
-			log.Fatalf("Struct need tag 'db'")
+			log.Printf("%s has no tag 'db', skip it.\n", tableType.Field(i).Name)
+			continue
 		}
 		value := tableValue.Field(i).Interface()
 		if skipEmpty == true && (value == 0 || value == "") {
@@ -178,13 +179,14 @@ func (build *InsertSqlBuilder) InsertByStruct(tableMap interface{}) {
 	for i := 0; i < num; i++ {
 		dbTag := tableType.Field(i).Tag.Get("db")
 		if dbTag == "" {
-			log.Fatalf("Struct need tag 'db'")
+			log.Printf("%s has no tag 'db', skip it.\n", tableType.Field(i).Name)
+			continue
 		}
 		if sqlStr == "" {
-			sqlStr = fmt.Sprintf("%s", dbTag)
+			sqlStr = fmt.Sprintf("`%s`", dbTag)
 			valStr = build.flag
 		} else {
-			sqlStr = fmt.Sprintf("%s,%s", sqlStr, dbTag)
+			sqlStr = fmt.Sprintf("%s,`%s`", sqlStr, dbTag)
 			valStr = fmt.Sprintf("%s,%s", valStr, build.flag)
 		}
 		build.args = append(build.args, tableValue.Field(i).Interface())
@@ -206,7 +208,7 @@ func (build *SelectSqlBuilder) SelectByStruct(tableMap interface{}, skipEmpty bo
 	for i := 0; i < num; i++ {
 		dbTag := tableType.Field(i).Tag.Get("db")
 		if dbTag == "" {
-			log.Printf("%s has no tag 'db', skip\n", tableType.Field(i).Name)
+			log.Printf("%s has no tag 'db', skip it.\n", tableType.Field(i).Name)
 			continue
 		}
 		if fieldStr == "" {

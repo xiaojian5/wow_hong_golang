@@ -45,7 +45,7 @@ func main() {
 
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
-	router.PUT("/macros", UpdateMacro)
+	router.PUT("/macros/:id", UpdateMacro)
 	router.POST("/log/:method", CreateLoginLog)
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/html/index.html")
@@ -69,7 +69,7 @@ func getMacroList(c *gin.Context) {
 		ProfessionID: professionId,
 		MasteryID:    masteryId,
 		Macro:        c.DefaultQuery("macro", ""),
-		IsVerify:     int8(isVerify),
+		IsVerify:     isVerify,
 	}
 	result := modules.GetMacroList(macro)
 
@@ -97,22 +97,25 @@ func CreateMacro(c *gin.Context) {
 }
 
 func UpdateMacro(c *gin.Context) {
-	id, err := strconv.Atoi(c.DefaultQuery("id", "0"))
-	modules.CheckErr("id", err)
-	isVerify, err := strconv.Atoi(c.DefaultQuery("isVerify", "1"))
-	modules.CheckErr("isVerify", err)
+	token, err := c.Cookie("token")
+	// 简单的权限验证
+	if err != nil || token != "test" {
+		c.JSON(http.StatusForbidden, gin.H{})
+	} else {
+		id, err := strconv.Atoi(c.Param("id"))
+		modules.CheckErr("id", err)
 
-	macro := modules.Macro{
-		ID:         id,
-		Title:      c.DefaultQuery("title", ""),
-		Macro:      c.DefaultQuery("macro", ""),
-		UpdateTime: time.Now().Format("2006-01-02 15:04:05"),
-		Author:     c.DefaultQuery("author", ""),
-		IsVerify:   int8(isVerify),
+		macro := modules.Macro{
+			ID:         id,
+			UpdateTime: time.Now().Format("2006-01-02 15:04:05"),
+		}
+
+		err = c.BindJSON(&macro)
+		modules.CheckErr("BindJSON", err)
+
+		result := modules.UpdateMacroByID(macro, macro.ID)
+		c.JSON(http.StatusOK, gin.H{"result": result,})
 	}
-
-	result := modules.UpdateMacroByID(macro, macro.ID)
-	c.JSON(http.StatusOK, gin.H{"result": result,})
 }
 
 func CreateLoginLog(c *gin.Context) {

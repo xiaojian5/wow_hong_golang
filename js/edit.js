@@ -20,7 +20,7 @@ var vue = new Vue({
     },
     methods: {
         search: function() {
-            var verify = document.getElementById("verify")
+            let verify = document.getElementById("verify");
             isVerify = verify.value;
             axios.get('/macros', {
                 params: {
@@ -40,32 +40,30 @@ var vue = new Vue({
         },
         update: function(id) {
             console.log(id);
-            var isVerify = document.getElementById("verify_" + id).value
-            var author = document.getElementById("author_" + id).value
-            var title = document.getElementById("title_" + id).value
-            var macro = document.getElementById("macro_" + id).value
+            let isVerify = document.getElementById("verify_" + id).value;
+            let author = document.getElementById("author_" + id).value;
+            let title = document.getElementById("title_" + id).value;
+            let macro = document.getElementById("macro_" + id).value;
 
-            axios.put('/macros', {
-                id: parseInt(id),
-                isVerify: parseInt(isVerify),
-                author: author,
-                title: title,
-                macro: macro,
-            })
-                .then(function(response) {
-                    console.log(response);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-                .then(function() {
-                    // always executed
-                });
+            axios.put('/macros/' + id, {
+                    isVerify: parseInt(isVerify),
+                    author: author,
+                    title: title,
+                    macro: macro,
+                }
+            ).then(function(response) {
+                console.log(response);
+                if ((response.data.result == "true" || response.data.result == true) &&
+                    (isVerify === 1 || isVerify === "1")) {
+                    document.getElementById("verify_" + id).parentElement.parentElement.style.display = "none";
+                }
+            });
+
+            console.log(id);
         }
     },
     created: function() {
-        axios.post('/log/edit', {
-        })
+        axios.post('/log/edit', {})
             .then(function(response) {
                 console.log(response);
             })
