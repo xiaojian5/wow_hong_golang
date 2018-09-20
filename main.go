@@ -28,7 +28,7 @@ func main() {
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
 
-	//gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	// 设置静态资源
