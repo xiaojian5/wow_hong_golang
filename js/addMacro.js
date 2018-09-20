@@ -1,5 +1,5 @@
 var vue = new Vue({
-    el: "#edit_macro",
+    el: "#container",
     data: {
         professions: [
             {'id': 1, 'name': '猎人'},

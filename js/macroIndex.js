@@ -1,5 +1,5 @@
 var vue = new Vue({
-    el: "#container_div",
+    el: "#container",
     data: {
         commands: [],
         conditions: [],
@@ -56,14 +56,14 @@ var vue = new Vue({
             } else {
                 this.macro = '';
                 this.selectTemplates = this.select_template.split(';');
-                console.log(this.selectTemplates);
+                // console.log(this.selectTemplates);
                 var len = this.selectTemplates.length;
                 var splitStr = '';
                 for (var i = 0; i < len; i++) {
                     if (this.macro) {
                         splitStr = ';';
                     }
-                    console.log(this.selectTemplates[i]);
+                    // console.log(this.selectTemplates[i]);
                     this.macro += splitStr + this.selectTemplates[i] + this.skillName;
                 }
             }
@@ -92,10 +92,7 @@ var vue = new Vue({
         axios.post('/log/macroIndex', {
         })
             .then(function(response) {
-                console.log(response);
-            })
-            .catch(function(error) {
-                console.log(error);
+                // console.log(response);
             });
     }
 });

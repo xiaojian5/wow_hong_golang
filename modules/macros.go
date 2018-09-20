@@ -36,7 +36,8 @@ func GetMacroList(macro Macro) []Macro {
 
 	macros := make([]Macro, 0)
 
-	rows, err := DbConn.Query(builder.String(), builder.Args()...)
+	conn := GetDbConn()
+	rows, err := conn.Query(builder.String(), builder.Args()...)
 	CheckErr("GetMacroList", err)
 
 	sqlx.StructScan(rows, &macros)
@@ -47,7 +48,8 @@ func CreateMacro(macro Macro) bool {
 	builder := sql.Insert("macros")
 	builder.InsertByStruct(macro)
 
-	tx, err := DbConn.Begin()
+	conn := GetDbConn()
+	tx, err := conn.Begin()
 	if err != nil {
 		CheckErr("CreateMacro beginx", err)
 		return false
@@ -75,7 +77,8 @@ func UpdateMacroByID(macro Macro, id int) bool {
 	builder.UpdateByStruct(macro, true)
 	builder.WhereEq("id", id)
 
-	tx, err := DbConn.Beginx()
+	conn := GetDbConn()
+	tx, err := conn.Beginx()
 	if err != nil {
 		CheckErr("CreateMacro beginx", err)
 		return false

@@ -1,5 +1,5 @@
 var vue = new Vue({
-    el: "#fast-create",
+    el: "#container",
     data: {
         professions: [
             {"id": 1, "name": "猎人"},
@@ -171,16 +171,14 @@ var vue = new Vue({
             }
         }
     },
-    computed: {
-    },
+    computed: {},
     created: function() {
         axios.post('/log/index', {
         })
             .then(function(response) {
                 // console.log(response);
-            })
-            .catch(function(error) {
-                console.log(error);
             });
+    },
+    beforeCreate: function() {
     }
 });

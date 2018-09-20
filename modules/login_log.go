@@ -24,7 +24,8 @@ func CreateLog(ip string, method string) bool {
 	builder := sql_builder.Insert("login_log")
 	builder.InsertByStruct(log)
 
-	res, err := DbConn.Exec(builder.String(), builder.Args()...)
+	conn := GetDbConn()
+	res, err := conn.Exec(builder.String(), builder.Args()...)
 	rowNum, err := res.RowsAffected()
 	if err != nil {
 		CheckErr(builder.String(), err)

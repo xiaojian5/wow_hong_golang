@@ -1,5 +1,5 @@
 var vue = new Vue({
-    el: "#macrolist",
+    el: "#container",
     data: {
         professions: [
             {'id': 1, 'name': '猎人'},
@@ -72,7 +72,7 @@ var vue = new Vue({
             document.getElementById("macro_text").select();
             document.execCommand("Copy");
             alert("已复制^-^！");
-        }
+        },
     },
     created: function() {
         axios.post('/log/macroList', {})

@@ -4,41 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>宏工具-快速创建</title>
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 </head>
 <body>
-<div class="container" id="fast-create">
-    <div class="row">
-        <div class="bs-example" data-example-id="simple-nav-justified">
-            <ul class="nav nav-tabs nav-justified">
-                <li role="presentation" class="active"><a href="./index.html">快速创建</a></li>
-                <li role="presentation"><a href="./macroIndex.html">自己组合条件</a></li>
-                <li role="presentation"><a href="./addMacro.html">分享一条宏</a></li>
-                <li role="presentation"><a href="./macroList.html">搜索同伴分享的宏</a></li>
-                <li role="presentation"><a href="./info.html">宏完全指南</a></li>
-            </ul>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="form-group">
+<div class="container" id="container" flag="index">
+    <script src="../js/header.js"></script>
+    <div class="row" style="margin-top: 70px;" id="content">
+        <div class="form-group col-md-12">
             <label>技能名称：</label>
             <input type="text" class="form-control" v-model="skillName">
         </div>
-        <div class="form-group">
+        <div class="form-group col-md-12">
             <label>技能类型：</label>
             <select class="form-control" v-model="skillType">
                 <option v-for="item in skillTypeTable" v-bind:value="item.id">{{item.name}}</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group col-md-12">
             <button class="btn btn-success" v-on:click="fastCreate">快速创建</button>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12 table-responsive">
+        <div class="col-md-12 table-responsive">
             <table class="table">
                 <thead>
                 <tr>
@@ -66,9 +53,6 @@
 
     </div>
 </div>
-<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="../js/axios.min.js"></script>
 <script src="../js/index.js"></script>
 </body>
 </html>
