@@ -1,4 +1,4 @@
-var vue = new Vue({
+let vue = new Vue({
     el: "#container",
     data: {
         professions: [
@@ -22,7 +22,7 @@ var vue = new Vue({
     },
     methods: {
         search: function() {
-            var pid = document.getElementById("profession").value;
+            let pid = document.getElementById("profession").value;
             if (!pid) {
                 alert('职业或专精未选择！');
                 return false;
@@ -48,7 +48,7 @@ var vue = new Vue({
                 });
         },
         changeMacro: function() {
-            var id = document.getElementById("macro_id").value;
+            let id = document.getElementById("macro_id").value;
             if (!id) {
                 vue.$data.select_macro = [];
                 return;

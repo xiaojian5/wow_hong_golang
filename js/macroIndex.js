@@ -1,4 +1,4 @@
-var vue = new Vue({
+let vue = new Vue({
     el: "#container",
     data: {
         commands: [],
@@ -24,17 +24,17 @@ var vue = new Vue({
                 //分割多选条件
                 this.selectConditions = '[' + this.select_item + ']';
 
-                var changeLine = '';//是否换行
+                let changeLine = '';//是否换行
                 //如果是castsequence是特殊的
                 if (this.selectCommand === '/castsequence') {
-                    var s = ' reset=12/combat/target';
+                    let s = ' reset=12/combat/target';
                     if (this.macro) {
                         changeLine = "\r\n";
                     }
                     this.macro += changeLine + this.selectCommand + s + ' ' + this.skillName;
                 } else {
                     if (this.macro) {
-                        var ok = confirm('是否换行');
+                        let ok = confirm('是否换行');
                         if (ok) {
                             changeLine = "\r\n";
                             this.macro += changeLine + this.selectCommand + ' ' +
@@ -57,9 +57,9 @@ var vue = new Vue({
                 this.macro = '';
                 this.selectTemplates = this.select_template.split(';');
                 // console.log(this.selectTemplates);
-                var len = this.selectTemplates.length;
-                var splitStr = '';
-                for (var i = 0; i < len; i++) {
+                let len = this.selectTemplates.length;
+                let splitStr = '';
+                for (let i = 0; i < len; i++) {
                     if (this.macro) {
                         splitStr = ';';
                     }
@@ -76,10 +76,10 @@ var vue = new Vue({
         },
         changeCommand: function(event) {
             this.selectCommand = this.commands[this.selectCommandKey].name;
-            var key = this.selectCommandKey;
-            var val = this.commands[key];
+            let key = this.selectCommandKey;
+            let val = this.commands[key];
 
-            var con = document.getElementById("condition");
+            let con = document.getElementById("condition");
             if (val.type === '1') {
                 con.style.display = "none";
             } else {

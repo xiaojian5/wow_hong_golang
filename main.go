@@ -11,6 +11,8 @@ import (
 	"time"
 	"fmt"
 	"flag"
+	"strings"
+	"math"
 )
 
 var (
@@ -28,7 +30,7 @@ func main() {
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
 
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	// 设置静态资源
@@ -47,6 +49,7 @@ func main() {
 	router.POST("/macros", CreateMacro)
 	router.PUT("/macros/:id", UpdateMacro)
 	router.POST("/log/:method", CreateLoginLog)
+	router.POST("/create-sequence", CreateSequence)
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/html/index.html")
 	})
@@ -125,4 +128,27 @@ func CreateLoginLog(c *gin.Context) {
 	go modules.CreateLog(ip, method)
 
 	c.JSON(http.StatusOK, gin.H{})
+}
+
+func CreateSequence(c *gin.Context) {
+	temps := make([]modules.SequenceMacro, 2)
+
+	body, err := ioutil.ReadAll(c.Request.Body)
+	modules.CheckErr("CreateSequence", err)
+	err = json.Unmarshal(body, &temps)
+	modules.CheckErr("CreateSequence unmarshal", err)
+
+	for i, value := range temps {
+		if value.Cooldown == 0 {
+			temps[i].Cooldown = 100
+		}
+		temps[i].SkillName = strings.Replace(value.SkillName, " ", "", -1)
+		temps[i].SkillName = strings.Replace(value.SkillName, "\n", "", -1)
+	}
+	fmt.Fprintf(gin.DefaultWriter, "%s : %+v\n", "test", temps)
+
+	macros, maxTime := modules.CreateSequence(temps)
+	maxTime = int(math.Ceil(float64(maxTime) / 100))
+	macroText := fmt.Sprintf("#showtooltip <br>/castsequence reset=%d %s", maxTime, strings.Join(macros, ","));
+	c.JSON(http.StatusOK, gin.H{"text": macroText, "desc": fmt.Sprintf("- 最后一次按键【%d】秒后，将重置<br>- 技能按照左侧循环，时间和技能顺序可以自己修改！", maxTime)})
 }

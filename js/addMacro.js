@@ -1,4 +1,4 @@
-var vue = new Vue({
+let vue = new Vue({
     el: "#container",
     data: {
         professions: [
@@ -22,12 +22,12 @@ var vue = new Vue({
     },
     methods: {
         changeProfession: function() {
-            var len = vue.$data.professions.length;
+            let len = vue.$data.professions.length;
             console.log(len);
             if (len <= 0) {
                 return false;
             }
-            for (var i = 0; i < len; i++) {
+            for (let i = 0; i < len; i++) {
                 if (vue.$data.select_proid === vue.$data.professions[i].id) {
                     vue.$data.select_pro = vue.$data.professions[i];
                     // this.select_mastery = this.select_pro.child;
@@ -35,19 +35,19 @@ var vue = new Vue({
             }
         },
         submitToService: function() {
-            var pid = document.getElementById("profession").value;
+            let pid = document.getElementById("profession").value;
             if (!pid) {
                 alert('职业不能为空！');
                 return false;
             }
-            var title = document.getElementById("title").value;
-            var macro = document.getElementById("macro").value;
+            let title = document.getElementById("title").value;
+            let macro = document.getElementById("macro").value;
             if (!title || !macro) {
                 alert('标题或宏模板不能为空！');
                 return false;
             }
 
-            var author = document.getElementById("author").value;
+            let author = document.getElementById("author").value;
             if (!author) {
                 alert('请留下你的艾泽拉斯名称，分享者必将被铭记！');
                 return false;
@@ -62,12 +62,6 @@ var vue = new Vue({
                     console.log(response);
                     document.getElementById("title").value = "";
                     document.getElementById("macro").value = "";
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-                .then(function() {
-                    // always executed
                 });
         }
     },

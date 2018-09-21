@@ -1,10 +1,11 @@
 package modules
 
 import (
-	"github.com/jmoiron/sqlx"
 	sql "github.com/illidan33/sql-builder"
+	"github.com/jmoiron/sqlx"
 )
 
+// 宏文本-数据库映射
 type Macro struct {
 	ID int `json:"id" db:"id"`
 	// 标题
@@ -21,6 +22,18 @@ type Macro struct {
 	ProfessionID int `json:"professionId" db:"profession_id"`
 	// 是否通过审核
 	IsVerify int `json:"isVerify" db:"is_verify"`
+}
+
+// 快速创建
+type SequenceMacro struct {
+	// 名称
+	SkillName string `json:"skillName"`
+	// 优先级
+	Level int `json:"level"`
+	// 冷却时间(秒*100)
+	Cooldown int `json:"cooldown"`
+	// 剩余时间
+	CDTime int `json:"-"`
 }
 
 // 获取模板列表
@@ -98,4 +111,47 @@ func UpdateMacroByID(macro Macro, id int) bool {
 	}
 
 	return true
+}
+
+func CreateSequence(temps []SequenceMacro) (macroText []string, maxTime int) {
+	for _, value := range temps {
+		if maxTime == 0 {
+			maxTime = value.Cooldown
+		} else {
+			if value.Cooldown > maxTime {
+				maxTime = value.Cooldown
+			}
+		}
+	}
+
+	for i := 0; i < maxTime; i++ {
+		coolIndex := 0
+		coolLevel := 0
+		for j, value := range temps {
+			if value.CDTime != 0 {
+				continue
+			}
+			if coolLevel == 0 {
+				coolLevel = value.Level
+				coolIndex = j
+			} else {
+				if coolLevel > value.Level {
+					coolLevel = value.Level
+					coolIndex = j
+				}
+			}
+		}
+		if coolLevel != 0 {
+			macroText = append(macroText, temps[coolIndex].SkillName)
+			temps[coolIndex].CDTime = temps[coolIndex].Cooldown
+		}
+		// CD时间减1
+		for k, value := range temps {
+			if value.CDTime != 0 {
+				temps[k].CDTime -= 1
+			}
+		}
+	}
+
+	return macroText, maxTime
 }

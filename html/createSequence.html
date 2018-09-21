@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>宏工具-快速创建</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<div class="container" id="container" flag="createSequence">
+    <script src="../js/header.js"></script>
+    <div class="row" style="margin-top: 70px;" id="content">
+        <div class="col-md-12">
+            <label class="text-danger">Warning：正在测试中的功能，待完善中。。。</label>
+        </div>
+        <div class="col-md-12" id="btn_div">
+            <button class="btn btn-success" v-on:click="addTemp">增加一个技能框</button>
+            <button class="btn btn-success" v-on:click="create">创建技能循环</button>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-condensed" style="word-break:break-all; word-wrap:break-word;">
+                <thead>
+                <tr>
+                    <th class="col-md-1">#</th>
+                    <th class="col-md-6">宏文本</th>
+                    <th>描述信息</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="item1 in macros">
+                    <th scope="row">{{item1.id}}</th>
+                    <td v-html="item1.text"></td>
+                    <td v-html="item1.desc"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script src="../js/createSequence.js"></script>
+</body>
+</html>

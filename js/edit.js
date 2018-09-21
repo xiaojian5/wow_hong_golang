@@ -1,5 +1,5 @@
-var vue = new Vue({
-    el: "#edit",
+let vue = new Vue({
+    el: "#content",
     data: {
         professions: [
             {"id": 1, "name": "猎人"},

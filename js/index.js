@@ -1,4 +1,4 @@
-var vue = new Vue({
+let vue = new Vue({
     el: "#container",
     data: {
         professions: [
@@ -120,15 +120,15 @@ var vue = new Vue({
                 vue.$data.skillName = vue.$data.skillName.replace(/(^\s*)|(\s*$)/g, "");
                 vue.$data.skillTable = [];//清空
                 vue.$data.skillTableOfRemote = [];
-                var num = 1;
+                let num = 1;
 
-                var skills = vue.$data.skillCondition[vue.$data.skillType];
+                let skills = vue.$data.skillCondition[vue.$data.skillType];
 
-                var len = skills.length;
-                for (var i = 0; i < len; i++) {
-                    var text = desc = "";
-                    var lenL = skills[i].length;
-                    for (var j = 0; j < lenL; j++) {
+                let len = skills.length;
+                for (let i = 0; i < len; i++) {
+                    let text = desc = "";
+                    let lenL = skills[i].length;
+                    for (let j = 0; j < lenL; j++) {
                         text += "<br>/cast " + skills[i][j].condition + vue.$data.skillName;
                         if (skills[i][j].condition !== "") {
 
@@ -153,8 +153,8 @@ var vue = new Vue({
                 })
                     .then(function(response) {
                         // console.log(response);
-                        var len = response.data.length
-                        for (var i = 0; i < len; i++) {
+                        let len = response.data.length
+                        for (let i = 0; i < len; i++) {
                             vue.$data.skillTableOfRemote.push({
                                 "id": num,
                                 "text": response.data[i].macro,
