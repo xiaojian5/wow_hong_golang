@@ -3,14 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>宏工具-快速创建</title>
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
-    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <title>宏工具-资料指南</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container" id="container" flag="info">
-    <script src="../js/header.js"></script>
+    <div class="row" id="header">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
+                        <span class="sr-only">Toggle</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="./index.html" style="color: #3c763d;">Macro</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li id="index"><a href="./index.html" style="color: #3c763d;">快速创建</a></li>
+                        <li id="createSequence"><a href="./createSequence.html" style="color: #3c763d;">创建技能循环</a></li>
+                        <li id="macroIndex"><a href="./macroIndex.html" style="color: #3c763d;">手动组合</a></li>
+                        <li id="addMacro"><a href="./addMacro.html" style="color: #3c763d;">分享Your宏</a></li>
+                        <li id="macroList"><a href="./macroList.html" style="color: #3c763d;">搜索</a></li>
+                        <li id="info" class="active"><a href="./info.html" style="color: #3c763d;">宏资料指南</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
     <div class="row" style="margin-top: 70px;" id="content">
         <ul class="list-group">
             <a href="https://bbs.nga.cn/read.php?tid=1858624">
@@ -29,6 +55,14 @@
     </div>
 </div>
 <script>
+    function toggle() {
+        let flag = document.getElementById("navbar-collapse-1").style.display;
+        if (flag === "block") {
+            document.getElementById("navbar-collapse-1").style.display = "none";
+        } else {
+            document.getElementById("navbar-collapse-1").style.display = "block";
+        }
+    }
     axios.post('/log/info', {})
             .then(function(response) {
                 // console.log(response);

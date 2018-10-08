@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>宏工具-编辑</title>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
-    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
-    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container" id="content">
@@ -55,6 +55,81 @@
     </div>
 </div>
 <br><br><br>
-<script src="../js/edit.js"></script>
+<script>
+    let vue = new Vue({
+        el: "#content",
+        data: {
+            professions: [
+                {"id": 1, "name": "猎人"},
+                {"id": 10, "name": "德鲁伊"},
+                {"id": 20, "name": "死亡骑士"},
+                {"id": 30, "name": "法师"},
+                {"id": 40, "name": "圣骑士"},
+                {"id": 50, "name": "牧师"},
+                {"id": 60, "name": "盗贼"},
+                {"id": 70, "name": "萨满祭司"},
+                {"id": 80, "name": "术士"},
+                {"id": 90, "name": "战士"},
+                {"id": 100, "name": "武僧"},
+                {"id": 110, "name": "恶魔猎手"},
+                {"id": 120, "name": "其他"},
+            ],
+            macros: [],
+        },
+        methods: {
+            search: function() {
+                let verify = document.getElementById("verify");
+                isVerify = verify.value;
+                axios.get('/macros', {
+                    params: {
+                        isVerify: isVerify,
+                    }
+                })
+                        .then(function(response) {
+                            console.log(response);
+                            vue.$data.macros = response.data;
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
+                        .then(function() {
+                            // always executed
+                        });
+            },
+            update: function(id) {
+                console.log(id);
+                let isVerify = document.getElementById("verify_" + id).value;
+                let author = document.getElementById("author_" + id).value;
+                let title = document.getElementById("title_" + id).value;
+                let macro = document.getElementById("macro_" + id).value;
+
+                axios.put('/macros/' + id, {
+                            isVerify: parseInt(isVerify),
+                            author: author,
+                            title: title,
+                            macro: macro,
+                        }
+                ).then(function(response) {
+                    console.log(response);
+                    if ((response.data.result == "true" || response.data.result == true) &&
+                            (isVerify === 1 || isVerify === "1")) {
+                        document.getElementById("verify_" + id).parentElement.parentElement.style.display = "none";
+                    }
+                });
+
+                console.log(id);
+            }
+        },
+        created: function() {
+            axios.post('/log/edit', {})
+                    .then(function(response) {
+                        console.log(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+        }
+    })
+</script>
 </body>
 </html>

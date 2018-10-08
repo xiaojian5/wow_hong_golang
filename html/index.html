@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>宏工具-快速创建</title>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
-    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
-    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container" id="container" flag="index">
-    <script src="../js/header.js"></script>
+    <div class="row" id="header">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
+                        <span class="sr-only">Toggle</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="./index.html" style="color: #3c763d;">Macro</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li id="index" class="active"><a href="./index.html" style="color: #3c763d;">快速创建</a></li>
+                        <li id="createSequence"><a href="./createSequence.html" style="color: #3c763d;">创建技能循环</a></li>
+                        <li id="macroIndex"><a href="./macroIndex.html" style="color: #3c763d;">手动组合</a></li>
+                        <li id="addMacro"><a href="./addMacro.html" style="color: #3c763d;">分享Your宏</a></li>
+                        <li id="macroList"><a href="./macroList.html" style="color: #3c763d;">搜索</a></li>
+                        <li id="info"><a href="./info.html" style="color: #3c763d;">宏指南</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
     <div class="row" style="margin-top: 70px;" id="content">
         <div class="form-group col-md-12">
             <label>技能名称：</label>
@@ -53,6 +80,199 @@
 
     </div>
 </div>
-<script src="../js/index.js"></script>
+<script>
+    function toggle() {
+        let flag = document.getElementById("navbar-collapse-1").style.display;
+        if (flag === "block") {
+            document.getElementById("navbar-collapse-1").style.display = "none";
+        } else {
+            document.getElementById("navbar-collapse-1").style.display = "block";
+        }
+    }
+    let vue = new Vue({
+        el: "#container",
+        data: {
+            professions: [
+                {"id": 1, "name": "猎人"},
+                {"id": 10, "name": "德鲁伊"},
+                {"id": 20, "name": "死亡骑士"},
+                {"id": 30, "name": "法师"},
+                {"id": 40, "name": "圣骑士"},
+                {"id": 50, "name": "牧师"},
+                {"id": 60, "name": "盗贼"},
+                {"id": 70, "name": "萨满祭司"},
+                {"id": 80, "name": "术士"},
+                {"id": 90, "name": "战士"},
+                {"id": 100, "name": "武僧"},
+                {"id": 110, "name": "恶魔猎手"},
+                {"id": 120, "name": "其他"},
+            ],
+            skillTypeTable: [
+                {
+                    "id": 0,
+                    "name": "请选择技能类型",
+                },
+                {
+                    "id": 1,
+                    "name": "伤害技能(单体)",
+                },
+                {
+                    "id": 2,
+                    "name": "治疗技能(单体)",
+                },
+                {
+                    "id": 3,
+                    "name": "范围(伤害/治疗)技能",
+                },
+                {
+                    "id": 4,
+                    "name": "增益技能",
+                },
+
+            ],
+            skillName: "",
+            skillType: "0",
+            skillCondition: {
+                "0": [],
+                "1": [
+                    [
+                        {
+                            "condition": "[@mouseover,harm]",
+                            "desc": "鼠标指向的目标是敌对目标",
+                        },
+                        {
+                            "condition": "[@target,harm]",
+                            "desc": "当前目标是敌对目标",
+                        },
+                        {
+                            "condition": "",
+                            "desc": "直接施放"
+                        },
+                    ],
+                ],
+                "2": [
+                    [
+                        {
+                            "condition": "[@mouseover,help]",
+                            "desc": "鼠标指向的目标是友善目标",
+                        },
+                        {
+                            "condition": "[@target,help]",
+                            "desc": "当前目标是友善目标",
+                        },
+                        {
+                            "condition": "[@player]",
+                            "desc": "以玩家自己为目标",
+                        },
+                        {
+                            "condition": "",
+                            "desc": "直接施放"
+                        }
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "condition": "[@cursor]",
+                            "desc": "鼠标当前位置",
+                        },
+                        {
+                            "condition": "",
+                            "desc": "直接施放"
+                        }
+                    ],
+                    [
+                        {
+                            "condition": "[@player]",
+                            "desc": "玩家当前位置",
+                        },
+                        {
+                            "condition": "",
+                            "desc": "直接施放"
+                        }
+                    ]
+                ],
+                "4": [
+                    [
+                        {
+                            "condition": "",
+                            "desc": "直接施放"
+                        }
+                    ],
+                ]
+            },
+            skillTable: [],
+            skillTableOfRemote: [],
+        },
+        methods: {
+            fastCreate: function() {
+                console.log(vue.$data.skillType);
+                if (vue.$data.skillType !== "0" && vue.$data !== 0) {
+                    vue.$data.skillName = vue.$data.skillName.replace(/(^\s*)|(\s*$)/g, "");
+                    vue.$data.skillTable = [];//清空
+                    vue.$data.skillTableOfRemote = [];
+                    let num = 1;
+
+                    let skills = vue.$data.skillCondition[vue.$data.skillType];
+
+                    let len = skills.length;
+                    for (let i = 0; i < len; i++) {
+                        let text = desc = "";
+                        let lenL = skills[i].length;
+                        for (let j = 0; j < lenL; j++) {
+                            text += "<br>/cast " + skills[i][j].condition + vue.$data.skillName;
+                            if (skills[i][j].condition !== "") {
+
+                                desc += "<br>- 【" + skills[i][j].desc + "】则施放【" + vue.$data.skillName +
+                                        "】，否则跳过";
+                            } else {
+                                desc += "<br>- " + skills[i][j].desc + "【" + vue.$data.skillName + "】";
+
+                            }
+                        }
+                        vue.$data.skillTable.push({
+                            "id": num,
+                            "text": "#showtooltip" + text,
+                            "desc": "- 【显示技能图标和技能描述】" + desc,
+                        });
+                        num++;
+                    }
+                    axios.get('/macros', {
+                        params: {
+                            macro: vue.$data.skillName,
+                        }
+                    })
+                            .then(function(response) {
+                                // console.log(response);
+                                let len = response.data.length
+                                for (let i = 0; i < len; i++) {
+                                    vue.$data.skillTableOfRemote.push({
+                                        "id": num,
+                                        "text": response.data[i].macro,
+                                        "desc": response.data[i].title,
+                                    });
+                                    num++;
+                                }
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                } else {
+                    alert("请选择技能类型")
+                }
+            }
+        },
+        computed: {},
+        created: function() {
+            axios.post('/log/index', {
+            })
+                    .then(function(response) {
+                        // console.log(response);
+                    });
+        },
+        beforeCreate: function() {
+        }
+    });
+</script>
 </body>
 </html>
