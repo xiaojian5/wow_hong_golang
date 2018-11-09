@@ -1,5 +1,6 @@
 let vue = new Vue({
     el: "#container",
+	delimiters: ['${', '}$'],
     data: {
         professions: [
             {'id': 1, 'name': '猎人'},

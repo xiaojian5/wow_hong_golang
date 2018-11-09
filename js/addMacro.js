@@ -1,5 +1,6 @@
 let vue = new Vue({
     el: "#container",
+	delimiters: ['${', '}$'],
     data: {
         professions: [
             {'id': 1, 'name': '猎人'},
@@ -23,7 +24,7 @@ let vue = new Vue({
     methods: {
         changeProfession: function() {
             let len = vue.$data.professions.length;
-            console.log(len);
+            // console.log(len);
             if (len <= 0) {
                 return false;
             }
@@ -59,7 +60,6 @@ let vue = new Vue({
                 macro: macro,
             })
                 .then(function(response) {
-                    console.log(response);
                     document.getElementById("title").value = "";
                     document.getElementById("macro").value = "";
                 });
@@ -77,10 +77,10 @@ let vue = new Vue({
         axios.post('/log/addMacro', {
         })
             .then(function(response) {
-                console.log(response);
+                // console.log(response);
             })
             .catch(function(error) {
-                console.log(error);
+                // console.log(error);
             });
     }
 });

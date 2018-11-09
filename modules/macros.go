@@ -37,7 +37,7 @@ type SequenceMacro struct {
 }
 
 // 获取模板列表
-func GetMacroList(macro Macro) []Macro {
+func GetMacroList(macro Macro) ([]Macro, error) {
 	macroText := macro.Macro
 	macro.Macro = "" // WhereByStruct跳过macro的条件
 
@@ -51,66 +51,45 @@ func GetMacroList(macro Macro) []Macro {
 
 	conn := GetDbConn()
 	rows, err := conn.Query(builder.String(), builder.Args()...)
-	CheckErr("GetMacroList", err)
+	if err != nil {
+		return nil, err
+	}
 
 	sqlx.StructScan(rows, &macros)
-	return macros
+	return macros, nil
 }
 
-func CreateMacro(macro Macro) bool {
+func CreateMacro(macro Macro) error {
 	builder := sql.Insert("macros")
 	builder.InsertByStruct(macro)
 
 	conn := GetDbConn()
-	tx, err := conn.Begin()
-	if err != nil {
-		CheckErr("CreateMacro beginx", err)
-		return false
-	}
-	defer tx.Rollback()
 
-	stmt, err := tx.Prepare(builder.String())
+	stmt, err := conn.Prepare(builder.String())
+	if err != nil {
+		return err
+	}
 	_, err = stmt.Exec(builder.Args()...)
 	if err != nil {
-		tx.Rollback()
-		CheckErr("CreateMacro exec", err)
+		return err
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		CheckErr("CreateMacro commit", err)
-		return false
-	}
-
-	return true
+	return nil
 }
 
-func UpdateMacroByID(macro Macro, id int) bool {
+func UpdateMacroByID(macro Macro, id int) error {
 	builder := sql.Update("macros")
 	builder.UpdateByStruct(macro, true)
 	builder.WhereEq("id", id)
 
 	conn := GetDbConn()
-	tx, err := conn.Beginx()
+
+	_, err := conn.Exec(builder.String(), builder.Args()...)
 	if err != nil {
-		CheckErr("CreateMacro beginx", err)
-		return false
+		return err
 	}
 
-	_, err = tx.Exec(builder.String(), builder.Args()...)
-	if err != nil {
-		tx.Rollback()
-		CheckErr("CreateMacro exec", err)
-		return false
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		CheckErr("CreateMacro commit", err)
-		return false
-	}
-
-	return true
+	return nil
 }
 
 func CreateSequence(temps []SequenceMacro) (macroText []string, maxTime int) {

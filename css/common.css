@@ -1,0 +1,17 @@
+body {
+	background-image: url('/img/bg.jpg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+	background-size: cover;
+	background-color: #000000;
+	color: #CCCCCC;
+}
+
+#content {
+	padding: 20px;
+	margin-top: 60px;
+	border-radius: 10px;
+	background-color: #000000;
+	background-color: rgba(0, 0, 0, 0.7);
+}

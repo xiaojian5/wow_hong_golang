@@ -6,40 +6,15 @@
     <title>宏工具-分享</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/common.css">
     <script src="../js/vue.min.js" ></script>
     <script src="../js/axios.min.js" ></script>
+	<script>let type = "addMacro";</script>
 </head>
 <body>
 <div class="container" id="container" flag="addMacro">
-    <div class="row" id="header">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
-                        <span class="sr-only">Toggle</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="./index.html" style="color: #3c763d;">Macro</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li id="index"><a href="./index.html" style="color: #3c763d;">快速创建</a></li>
-                        <li id="createSequence"><a href="./createSequence.html" style="color: #3c763d;">创建技能循环</a></li>
-                        <li id="macroIndex"><a href="./macroIndex.html" style="color: #3c763d;">手动组合</a></li>
-                        <li id="addMacro" class="active"><a href="./addMacro.html" style="color: #3c763d;">分享Your宏</a></li>
-                        <li id="macroList"><a href="./macroList.html" style="color: #3c763d;">搜索</a></li>
-                        <li id="info"><a href="./info.html" style="color: #3c763d;">宏指南</a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-    </div>
-    <div class="row" style="margin-top: 70px;" id="content">
+{{template "header"}}
+    <div class="row" id="content">
         <div class="col-sm-12" id="edit_macro">
             <form action="" method="post" class="col-sm-10" id="addMacroForm">
                 <style>
@@ -54,7 +29,7 @@
                             请选择
                         </option>
                         <option v-for="item in professions" v-bind:value="item.id">
-                        {{item.name}}
+                        ${item.name}$
                         </option>
                     </select>
                 </div>
@@ -76,104 +51,12 @@
                     <label for="title">服务器-角色名称：</label>
                     <input name="author" type="text" class="form-control" id="author" placeholder="请输入分享者信息！格式：服务器-角色名称">
                 </div>
-                <button type="button" class="btn btn-success col-sm-12" v-on:click="submitToService">分享一条宏</button>
+                <button type="button" class="btn btn-info col-sm-12" v-on:click="submitToService">分享一条宏</button>
             </form>
         </div>
     </div>
 </div>
 <br><br>
-<script>
-    function toggle() {
-        let flag = document.getElementById("navbar-collapse-1").style.display;
-        if (flag === "block") {
-            document.getElementById("navbar-collapse-1").style.display = "none";
-        } else {
-            document.getElementById("navbar-collapse-1").style.display = "block";
-        }
-    }
-    let vue = new Vue({
-        el: "#container",
-        data: {
-            professions: [
-                {'id': 1, 'name': '猎人'},
-                {'id': 10, 'name': '德鲁伊'},
-                {'id': 20, 'name': '死亡骑士'},
-                {'id': 30, 'name': '法师'},
-                {'id': 40, 'name': '圣骑士'},
-                {'id': 50, 'name': '牧师'},
-                {'id': 60, 'name': '盗贼'},
-                {'id': 70, 'name': '萨满祭司'},
-                {'id': 80, 'name': '术士'},
-                {'id': 90, 'name': '战士'},
-                {'id': 100, 'name': '武僧'},
-                {'id': 110, 'name': '恶魔猎手'},
-                {'id': 120, 'name': '其他'},
-            ],
-            select_proid: '',
-            select_pro: [],
-            select_mastery: [],
-        },
-        methods: {
-            changeProfession: function() {
-                let len = vue.$data.professions.length;
-                // console.log(len);
-                if (len <= 0) {
-                    return false;
-                }
-                for (let i = 0; i < len; i++) {
-                    if (vue.$data.select_proid === vue.$data.professions[i].id) {
-                        vue.$data.select_pro = vue.$data.professions[i];
-                        // this.select_mastery = this.select_pro.child;
-                    }
-                }
-            },
-            submitToService: function() {
-                let pid = document.getElementById("profession").value;
-                if (!pid) {
-                    alert('职业不能为空！');
-                    return false;
-                }
-                let title = document.getElementById("title").value;
-                let macro = document.getElementById("macro").value;
-                if (!title || !macro) {
-                    alert('标题或宏模板不能为空！');
-                    return false;
-                }
-
-                let author = document.getElementById("author").value;
-                if (!author) {
-                    alert('请留下你的艾泽拉斯名称，分享者必将被铭记！');
-                    return false;
-                }
-                axios.post('/macros', {
-                    professionId: parseInt(pid),
-                    title: title,
-                    author: author,
-                    macro: macro,
-                })
-                        .then(function(response) {
-                            // console.log(response);
-                            document.getElementById("title").value = "";
-                            document.getElementById("macro").value = "";
-                        });
-            }
-        },
-        computed: {
-            select_mastery: function() {
-                if (vue.$data.select_pro) {
-                    return vue.$data.select_pro.child;
-                }
-                return [];
-            }
-        },
-        created: function() {
-            axios.post('/log/addMacro', {
-            })
-                    .then(function(response) {
-                        // console.log(response);
-                    });
-        }
-    });
-</script>
+<script src="../js/addMacro.js"></script>
 </body>
 </html>

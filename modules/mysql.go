@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"reflect"
+	"strings"
 )
 
 var DbConn *sqlx.DB
@@ -13,9 +15,7 @@ func init() {
 }
 
 func GetDbConn() *sqlx.DB {
-	var err error
-	err = DbConn.Ping()
-	if err != nil {
+	if DbConn == nil {
 		DbConnetc()
 	}
 	return DbConn
@@ -24,16 +24,37 @@ func GetDbConn() *sqlx.DB {
 func DbConnetc() {
 	var err error
 	DbConn, err = sqlx.Open("mysql", "test:test@tcp(127.0.0.1:3306)/wow_hong?charset=utf8")
-	CheckErr("Connect Database", err)
+	if err != nil {
+		CheckErr("Connect Database", err)
+	}
 
 	DbConn.SetMaxOpenConns(2000)
 	DbConn.SetMaxIdleConns(1000)
 	err = DbConn.Ping()
-	CheckErr("Ping Database", err)
+	if err != nil {
+		CheckErr("Ping Database", err)
+	}
 }
 
 func CheckErr(msg string, err error) {
-	if err != nil {
-		fmt.Fprintf(gin.DefaultWriter, "%s : %+v\n", msg, err)
+	fmt.Fprintf(gin.DefaultWriter, "%s : %s\n", msg, err.Error())
+}
+
+func Debug(msg interface{}) {
+	if msg == nil {
+		fmt.Println("nil")
+		return
+	}
+	tp := reflect.TypeOf(msg)
+	if tp.Name() == "string" {
+		fmt.Fprintf(gin.DefaultWriter, "%s\n", msg)
+	} else if strings.Contains(tp.Name(), "int") {
+		fmt.Fprintf(gin.DefaultWriter, "%d\n", msg)
+	} else if strings.Contains(tp.Name(), "float") {
+		fmt.Fprintf(gin.DefaultWriter, "%f\n", msg)
+	} else if strings.Contains(tp.Name(), "map") {
+		fmt.Fprintf(gin.DefaultWriter, "%+v\n", msg)
+	} else {
+		fmt.Fprintf(gin.DefaultWriter, "%s\n", msg)
 	}
 }

@@ -1,4 +1,4 @@
-vue.commands = [
+vue.$data.commands = [
     {index: 0, desc: '释放技能或使用物品(同use)', name: '/cast', type: '1'},
     {index: 1, desc: '随机施放', name: '/castrandom', type: '1'},
     {index: 2, desc: '顺序施放', name: '/castsequence', type: '1'},
@@ -35,7 +35,7 @@ vue.commands = [
     {index: 33, desc: '延迟9秒大喊说话', name: '/IN 9 /Y', type: '0'},
 ];
 
-vue.conditions = [
+vue.$data.conditions = [
     {desc: '战斗状态', name: 'combat', type: '1'},
     {desc: '非战斗状态', name: 'nocombat', type: '1'},
     {desc: '潜行', name: 'stealth', type: '2'},
@@ -73,7 +73,7 @@ vue.conditions = [
     {desc: '是否选择pvp天赋第x层第xx个技能', name: 'pvptalent:x/xx', type: '15'},
 ];
 
-vue.templates = [
+vue.$data.templates = [
     {
         desc: '( 伤害技能 )鼠标指向是敌方，或目标是敌方',
         name: '/cast [@mouseover,harm,nodead];[@target,harm,nodead];[]'

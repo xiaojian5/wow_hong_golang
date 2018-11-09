@@ -1,5 +1,6 @@
 let vue = new Vue({
     el: "#content",
+	delimiters: ['${', '}$'],
     data: {
         macros: [],
         temp: {
@@ -28,7 +29,7 @@ let vue = new Vue({
             '                </select>\n' +
             '            </div>\n' +
             '            <div class="form-group col-md-12">\n' +
-            '                <button class="btn btn-success remove" v-on:click="remove(this)">删除</button>\n' +
+            '                <button class="btn btn-info remove" v-on:click="remove(this)">删除</button>\n' +
             '            </div>' +
             '        </div>',
         },
@@ -94,8 +95,7 @@ let vue = new Vue({
                 }
                 vue.$data.tempNum += 1;
 
-                document.getElementById("content").insertBefore(temp,
-                    document.getElementById("btn_div"));
+                document.getElementById("content").insertBefore(temp, document.getElementById("btn_div"));
             }
 
         }

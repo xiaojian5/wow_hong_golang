@@ -20,24 +20,21 @@ var (
 )
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			errNew := err.(error)
-			modules.CheckErr("Error", errNew)
-		}
-	}()
+	rootPath := "/data/golang/go/src/github.com/illidan33/wow_hong_golang/"
 
-	flag.IntVar(&port, "port", 8000, "listen port")
+	flag.IntVar(&port, "port", 8001, "listen port")
 	flag.Parse()
 
-	//gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
+	router.LoadHTMLGlob(rootPath + "html/*")
 
 	// 设置静态资源
-	router.Static("/js", "js")
-	router.Static("/css", "css")
-	router.Static("/html", "html")
-	router.StaticFile("/favicon.ico", "./favicon.ico")
+	router.Static("/js", rootPath+"js")
+	router.Static("/css", rootPath+"css")
+	router.Static("/img", rootPath+"img")
+	//router.Static("/html", "html")
+	router.StaticFile("/favicon.ico", rootPath+"favicon.ico")
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
@@ -45,27 +42,64 @@ func main() {
 		})
 	})
 
+	// html
+	router.GET("/", Index)
+	router.GET("/Macro/:type", MacroIndex)
+
+	// data
 	router.GET("/macros", getMacroList)
 	router.POST("/macros", CreateMacro)
 	router.PUT("/macros/:id", UpdateMacro)
 	router.POST("/log/:method", CreateLoginLog)
 	router.POST("/create-sequence", CreateSequence)
-	router.GET("/", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/html/index.html")
-	})
 
 	router.Run(fmt.Sprintf(":%d", port))
 }
 
+func Index(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", gin.H{})
+}
+func MacroIndex(c *gin.Context) {
+	c.Request.ParseForm()
+
+	page := c.Param("type")
+	switch page {
+	case "macroIndex":
+		c.HTML(http.StatusOK, "macroIndex.html", gin.H{})
+		break
+	case "addMacro":
+		c.HTML(http.StatusOK, "addMacro.html", gin.H{})
+		break
+	case "createSequence":
+		c.HTML(http.StatusOK, "createSequence.html", gin.H{})
+		break
+	case "info":
+		c.HTML(http.StatusOK, "info.html", gin.H{})
+		break
+	case "macroEditList":
+		c.HTML(http.StatusOK, "macroEditList.html", gin.H{})
+		break
+	case "macroList":
+		c.HTML(http.StatusOK, "macroList.html", gin.H{})
+		break
+	default:
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	}
+}
+
 func getMacroList(c *gin.Context) {
-	id, err := strconv.Atoi(c.DefaultQuery("id", "0"))
-	modules.CheckErr("id", err)
-	professionId, err := strconv.Atoi(c.DefaultQuery("professionId", "0"))
-	modules.CheckErr("professionId", err)
-	masteryId, err := strconv.Atoi(c.DefaultQuery("masteryId", "0"))
-	modules.CheckErr("masteryId", err)
-	isVerify, err := strconv.Atoi(c.DefaultQuery("isVerify", "1"))
-	modules.CheckErr("isVerify", err)
+	c.Request.ParseForm()
+
+	id, _ := strconv.Atoi(c.Param("id"))
+	professionId, _ := strconv.Atoi(c.Param("professionId"))
+	masteryId, _ := strconv.Atoi(c.Param("masteryId"))
+	isVerifyStr := c.Param("isVerify")
+	var isVerify int
+	if isVerifyStr == "" {
+		isVerify = 1
+	} else {
+		isVerify, _ = strconv.Atoi(isVerifyStr)
+	}
 
 	macro := modules.Macro{
 		ID:           id,
@@ -74,9 +108,13 @@ func getMacroList(c *gin.Context) {
 		Macro:        c.DefaultQuery("macro", ""),
 		IsVerify:     isVerify,
 	}
-	result := modules.GetMacroList(macro)
-
-	c.JSON(http.StatusOK, result)
+	result, err := modules.GetMacroList(macro)
+	if err != nil {
+		modules.CheckErr("getMacroList", err)
+		c.JSON(http.StatusBadRequest, gin.H{})
+	} else {
+		c.JSON(http.StatusOK, result)
+	}
 }
 
 func CreateMacro(c *gin.Context) {
@@ -90,11 +128,12 @@ func CreateMacro(c *gin.Context) {
 		macro.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
 		macro.IsVerify = 2
 
-		result := modules.CreateMacro(macro)
-		if result == true {
-			c.JSON(http.StatusOK, gin.H{})
-		} else {
+		err := modules.CreateMacro(macro)
+		if err != nil {
+			modules.CheckErr("createMacro", err)
 			c.JSON(http.StatusBadRequest, gin.H{})
+		} else {
+			c.JSON(http.StatusOK, gin.H{})
 		}
 	}
 }
@@ -131,12 +170,17 @@ func CreateLoginLog(c *gin.Context) {
 }
 
 func CreateSequence(c *gin.Context) {
+	c.Request.ParseForm()
 	temps := make([]modules.SequenceMacro, 2)
 
 	body, err := ioutil.ReadAll(c.Request.Body)
-	modules.CheckErr("CreateSequence", err)
+	if err != nil {
+		modules.CheckErr("CreateSequence", err)
+	}
 	err = json.Unmarshal(body, &temps)
-	modules.CheckErr("CreateSequence unmarshal", err)
+	if err != nil {
+		modules.CheckErr("CreateSequence unmarshal", err)
+	}
 
 	for i, value := range temps {
 		if value.Cooldown == 0 {

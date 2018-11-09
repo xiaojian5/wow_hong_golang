@@ -5,51 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>宏工具-资料指南</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/common.css">
 	<script src="../js/axios.min.js" ></script>
+	<script>let type = "info";</script>
+	<style>
+		.list-group li {
+			background-color: #000000;
+			background-color: rgba(0, 0, 0, 0.7);
+		}
+	</style>
 </head>
 <body>
 <div class="container" id="container" flag="info">
-    <div class="row" id="header">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
-                        <span class="sr-only">Toggle</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="./index.html" style="color: #3c763d;">Macro</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li id="index"><a href="./index.html" style="color: #3c763d;">快速创建</a></li>
-                        <li id="createSequence"><a href="./createSequence.html" style="color: #3c763d;">创建技能循环</a></li>
-                        <li id="macroIndex"><a href="./macroIndex.html" style="color: #3c763d;">手动组合</a></li>
-                        <li id="addMacro"><a href="./addMacro.html" style="color: #3c763d;">分享Your宏</a></li>
-                        <li id="macroList"><a href="./macroList.html" style="color: #3c763d;">搜索</a></li>
-                        <li id="info" class="active"><a href="./info.html" style="color: #3c763d;">宏资料指南</a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-    </div>
-    <div class="row" style="margin-top: 70px;" id="content">
+    {{template "header"}}
+	<div class="row" id="content">
+		<div class="col-md-12">
+			<h3>qq交流群：923174332</h3>
+			<h3>微信群：待续</h3>
+		</div>
+	</div>
+    <div class="row">
+		<h3>参考资料：</h3>
         <ul class="list-group">
             <a href="https://bbs.nga.cn/read.php?tid=1858624">
-                <li class="list-group-item text-success">[搬运]《考格威尔(Cogwheel's)宏命令完全指南》</li>
+                <li class="list-group-item">[搬运]《考格威尔(Cogwheel's)宏命令完全指南》</li>
             </a>
             <a href="https://bbs.nga.cn/read.php?tid=1014862">
-                <li class="list-group-item text-success">TBC宏指南(Cogwheel's Complete Macro Guide)</li>
+                <li class="list-group-item">TBC宏指南(Cogwheel's Complete Macro Guide)</li>
             </a>
             <a href="https://bbs.nga.cn/read.php?tid=2329476">
-                <li class="list-group-item text-success">[搬运]宏命令全表</li>
+                <li class="list-group-item">[搬运]宏命令全表</li>
             </a>
             <a href="https://bbs.nga.cn/read.php?tid=1599813">
-                <li class="list-group-item text-success">[译制的剩菜] 北美官网推荐教程：《宏命令完全指南》</li>
+                <li class="list-group-item">[译制的剩菜] 北美官网推荐教程：《宏命令完全指南》</li>
             </a>
 			<a href="https://wow.gamepedia.com/World_of_Warcraft_API#Location_Functions">
 				<li class="list-group-item text-danger">World of Warcraft API（国外）</li>
@@ -59,44 +47,33 @@
 			</a>
 		</ul>
     </div>
-	<div class="row" style="margin-top: 70px;" id="content">
-		<h3>楼主自己开发的PVP插件：</h3>
+
+	<div class="row">
+		<h3>楼主开发的PVP插件：</h3>
 		<ul class="list-group">
 			<a href="https://bbs.nga.cn/read.php?tid=15477121">
-				<li class="list-group-item text-success">PVPInfo -- 显示玩家PVP数据插件</li>
-			</a>
-		</ul>
-	</div>
-	<div class="row" style="margin-top: 70px;" id="content">
-		<h3>后续计划：</h3>
-		<ul class="list-group">
-			<a href="https://wow.gamepedia.com/World_of_Warcraft_API#Location_Functions">
-				<li class="list-group-item text-success">整合World of Warcraft API(魔兽世>界API)，并加入网站，添加使用实例，方便玩家查看、开发自己的插件</li>
-			</a>
-			<a href="https://wow.gamepedia.com/Macro_commands">
-				<li class="list-group-item text-success">翻译Macro commands（宏命令），并>更新本网站宏数据</li>
-			</a>
-			<a href="">
-				<li class="list-group-item text-success">改版网站，加入插件模块开发，类似>宏制作工具，即使不懂插件开发的玩家，也能开发属于自己的魔兽世界插件！</li>
+				<li class="list-group-item">PVPInfo -- 显示玩家PVP数据插件</li>
 			</a>
 		</ul>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
-			<h4>qq交流群：923174332</h4>
-			<h4>微信群：待续</h4>
-		</div>
+		<h3>后续计划：</h3>
+		<ul class="list-group">
+			<a href="https://wow.gamepedia.com/World_of_Warcraft_API#Location_Functions">
+				<li class="list-group-item">整合World of Warcraft API(魔兽世>界API)，并加入网站，添加使用实例，方便玩家查看、开发自己的插件</li>
+			</a>
+			<a href="https://wow.gamepedia.com/Macro_commands">
+				<li class="list-group-item">翻译Macro commands（宏命令），并>更新本网站宏数据</li>
+			</a>
+			<a href="">
+				<li class="list-group-item">改版网站，加入插件模块开发，类似>宏制作工具，即使不懂插件开发的玩家，也能开发属于自己的魔兽世界插件！</li>
+			</a>
+		</ul>
 	</div>
+	<br>
+	<br>
 </div>
 <script>
-    function toggle() {
-        let flag = document.getElementById("navbar-collapse-1").style.display;
-        if (flag === "block") {
-            document.getElementById("navbar-collapse-1").style.display = "none";
-        } else {
-            document.getElementById("navbar-collapse-1").style.display = "block";
-        }
-    }
     axios.post('/log/info', {})
             .then(function(response) {
                 // console.log(response);

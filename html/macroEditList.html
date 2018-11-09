@@ -17,7 +17,7 @@
                 全部
             </option>
             <option v-for="item in professions" v-bind:value="item.id">
-            {{item.name}}
+            ${item.name}$
             </option>
         </select>
         <select id="verify" name="verify" class="form-control col-xs-12 col-sm-12 col-md-2 col-lg-2" style="margin: 10px 0px;">
@@ -42,9 +42,9 @@
             <tr v-for="(selectmacro, key) in macros" :id="'tr_macro_'+selectmacro.id">
                 <td class=""><input :id="'verify_'+selectmacro.id" type="text" v-bind:value="selectmacro.isVerify"/></td>
                 <td class="hidden-xs hidden-sm"><input :id="'author_'+selectmacro.id" type="text" v-bind:value="selectmacro.author"/></td>
-                <td class="hidden-xs"><textarea :id="'title_'+selectmacro.id" class="form-control" rows="4">{{selectmacro.title}}</textarea></td>
+                <td class="hidden-xs"><textarea :id="'title_'+selectmacro.id" class="form-control" rows="4">${selectmacro.title}$</textarea></td>
                 <td>
-                    <textarea :id="'macro_'+selectmacro.id" class="form-control" rows="7">{{selectmacro.macro}}</textarea>
+                    <textarea :id="'macro_'+selectmacro.id" class="form-control" rows="7">${selectmacro.macro}$</textarea>
                 </td>
                 <td>
                     <button class="btn btn-default" v-on:click="update(selectmacro.id)" :flag="selectmacro.id">修改</button>
@@ -55,81 +55,6 @@
     </div>
 </div>
 <br><br><br>
-<script>
-    let vue = new Vue({
-        el: "#content",
-        data: {
-            professions: [
-                {"id": 1, "name": "猎人"},
-                {"id": 10, "name": "德鲁伊"},
-                {"id": 20, "name": "死亡骑士"},
-                {"id": 30, "name": "法师"},
-                {"id": 40, "name": "圣骑士"},
-                {"id": 50, "name": "牧师"},
-                {"id": 60, "name": "盗贼"},
-                {"id": 70, "name": "萨满祭司"},
-                {"id": 80, "name": "术士"},
-                {"id": 90, "name": "战士"},
-                {"id": 100, "name": "武僧"},
-                {"id": 110, "name": "恶魔猎手"},
-                {"id": 120, "name": "其他"},
-            ],
-            macros: [],
-        },
-        methods: {
-            search: function() {
-                let verify = document.getElementById("verify");
-                isVerify = verify.value;
-                axios.get('/macros', {
-                    params: {
-                        isVerify: isVerify,
-                    }
-                })
-                        .then(function(response) {
-                            console.log(response);
-                            vue.$data.macros = response.data;
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        })
-                        .then(function() {
-                            // always executed
-                        });
-            },
-            update: function(id) {
-                console.log(id);
-                let isVerify = document.getElementById("verify_" + id).value;
-                let author = document.getElementById("author_" + id).value;
-                let title = document.getElementById("title_" + id).value;
-                let macro = document.getElementById("macro_" + id).value;
-
-                axios.put('/macros/' + id, {
-                            isVerify: parseInt(isVerify),
-                            author: author,
-                            title: title,
-                            macro: macro,
-                        }
-                ).then(function(response) {
-                    console.log(response);
-                    if ((response.data.result == "true" || response.data.result == true) &&
-                            (isVerify === 1 || isVerify === "1")) {
-                        document.getElementById("verify_" + id).parentElement.parentElement.style.display = "none";
-                    }
-                });
-
-                console.log(id);
-            }
-        },
-        created: function() {
-            axios.post('/log/edit', {})
-                    .then(function(response) {
-                        console.log(response);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
-        }
-    })
-</script>
+<script src="../js/edit.js"></script>
 </body>
 </html>

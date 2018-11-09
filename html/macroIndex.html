@@ -5,40 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>宏工具-手动组合</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/common.css">
 	<script src="../js/vue.min.js" ></script>
 	<script src="../js/axios.min.js" ></script>
+	<script>let type = "macroIndex";</script>
 </head>
 <body>
 <div class="container" id="container" flag="macroIndex">
-    <div class="row" id="header">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
-                        <span class="sr-only">Toggle</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="./index.html" style="color: #3c763d;">Macro</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li id="index"><a href="./index.html" style="color: #3c763d;">快速创建</a></li>
-                        <li id="createSequence"><a href="./createSequence.html" style="color: #3c763d;">创建技能循环</a></li>
-                        <li id="macroIndex" class="active"><a href="./macroIndex.html" style="color: #3c763d;">手动组合</a></li>
-                        <li id="addMacro"><a href="./addMacro.html" style="color: #3c763d;">分享Your宏</a></li>
-                        <li id="macroList"><a href="./macroList.html" style="color: #3c763d;">搜索</a></li>
-                        <li id="info"><a href="./info.html" style="color: #3c763d;">宏指南</a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-    </div>
-    <div class="row" style="margin-top: 60px;" id="content">
+    {{template "header"}}
+    <div class="row" id="content">
         <div class="col-md-12">
             <label class="h5 text-danger">一点都不熟悉的朋友，建议勿用此功能！！！，否组自己手动组合出的宏很大概率无法使用！！！ </label>
         </div>
@@ -48,7 +23,7 @@
                 <div class="col-sm-4">
                     <select id="command_select" v-model="selectCommandKey" class="form-control" v-on:change='changeCommand'>
                         <option v-for="item in commands" v-bind:value="item.index">
-                        {{item.desc}}&nbsp;&nbsp;==&nbsp;&nbsp;{{item.name}}
+                        ${item.desc}$&nbsp;&nbsp;==&nbsp;&nbsp;${item.name}$
                         </option>
                     </select>
                 </div>
@@ -61,7 +36,7 @@
                 <div class="col-sm-4">
                     <select id="type_select" v-model="select_item" class="form-control" multiple="multiple" style="height: 400px;">
                         <option v-for="item in conditions" v-bind:value="item.name">
-                        {{item.desc}}&nbsp;&nbsp;==&nbsp;&nbsp;{{item.name}}
+                        ${item.desc}$&nbsp;&nbsp;==&nbsp;&nbsp;${item.name}$
                         </option>
                     </select>
                 </div>
@@ -74,8 +49,8 @@
             </div>
             <div class="col-sm-12">
                 <div class="clearfix">
-                    <button class="btn btn-success control-label col-xs-12 col-sm-5 col-md-3" v-on:click="insertMacro" style="margin: 0px 20px 10px 0px;">组合条件到宏模板</button>
-                    <button class="btn btn-success control-label col-xs-12 col-sm-5 col-md-3" v-on:click="copyHong">复制宏到游戏中</button>
+                    <button class="btn btn-info control-label col-xs-12 col-sm-5 col-md-3" v-on:click="insertMacro" style="margin: 0px 20px 10px 0px;">组合条件到宏模板</button>
+                    <button class="btn btn-info control-label col-xs-12 col-sm-5 col-md-3" v-on:click="copyHong">复制宏到游戏中</button>
                 </div>
                 <h4>宏模板：</h4>
                 <p style="font-size: 12px;">
@@ -84,123 +59,14 @@
                     3. 当前行的组合条件，条件符合则施放，不符合，继续下一行组合条件判定。<br>
                     4. 以下宏模板可以手动修改。<br>
                 </p>
-                <textarea id="hong_text" class="form-control" rows="7" v-model="allMacro">{{allMacro}}</textarea>
+                <textarea id="hong_text" class="form-control" rows="7" v-model="allMacro">${allMacro}$</textarea>
             </div>
 
         </div>
     </div>
 </div>
 <br><br><br>
-<script>
-    function toggle() {
-        let flag = document.getElementById("navbar-collapse-1").style.display;
-        if (flag === "block") {
-            document.getElementById("navbar-collapse-1").style.display = "none";
-        } else {
-            document.getElementById("navbar-collapse-1").style.display = "block";
-        }
-    }
-    let vue = new Vue({
-        el: "#container",
-        data: {
-            commands: [],
-            conditions: [],
-            templates: [],
-            condition_radio: 2,
-            selectCommandKey: '',
-            selectCommand: '',
-            select_item: '',//多选条件，需要分割开
-            selectConditions: [],
-            select_template: '',//组合模板是很多条件
-            selectTemplates: [],
-            skillName: '',
-            macro: '',//组合条件组合成的宏
-            allMacro: ''//加上头部tip的宏
-        },
-        methods: {
-            insertMacro: function() {
-                // console.log('insertMacro_'+vue.$data.condition_radio);
-                vue.$data.skillName = vue.$data.skillName.replace(/(^\s*)|(\s*$)/g, "");
-                //自己组合条件
-                if (vue.$data.condition_radio === 2) {
-                    //分割多选条件
-                    vue.$data.selectConditions = '[' + vue.$data.select_item + ']';
-
-                    let changeLine = '';//是否换行
-                    //如果是castsequence是特殊的
-                    if (vue.$data.selectCommand === '/castsequence') {
-                        let s = ' reset=12/combat/target';
-                        if (vue.$data.macro) {
-                            changeLine = "\r\n";
-                        }
-                        vue.$data.macro += changeLine + vue.$data.selectCommand + s + ' ' + vue.$data.skillName;
-                    } else {
-                        if (vue.$data.macro) {
-                            let ok = confirm('是否换行');
-                            if (ok) {
-                                changeLine = "\r\n";
-                                vue.$data.macro += changeLine + vue.$data.selectCommand + ' ' +
-                                        vue.$data.selectConditions + vue.$data.skillName;
-                            } else {
-                                changeLine = ';';
-                                vue.$data.macro += changeLine + vue.$data.selectConditions + vue.$data.skillName;//不换行不加命令
-                            }
-                        } else {
-                            if (!vue.$data.selectCommand) {
-                                alert('请选择命令');
-                            } else {
-                                vue.$data.macro = changeLine + vue.$data.selectCommand + ' ' +
-                                        vue.$data.selectConditions +
-                                        vue.$data.skillName;
-                            }
-                        }
-                    }
-                } else {
-                    vue.$data.macro = '';
-                    vue.$data.selectTemplates = vue.$data.select_template.split(';');
-                    // console.log(vue.$data.selectTemplates);
-                    let len = vue.$data.selectTemplates.length;
-                    let splitStr = '';
-                    for (let i = 0; i < len; i++) {
-                        if (vue.$data.macro) {
-                            splitStr = ';';
-                        }
-                        // console.log(vue.$data.selectTemplates[i]);
-                        vue.$data.macro += splitStr + vue.$data.selectTemplates[i] + vue.$data.skillName;
-                    }
-                }
-                vue.$data.allMacro = "#showtooltip\r\n" + vue.$data.macro;
-            },
-            copyHong: function() {
-                document.getElementById("hong_text").select();
-                document.execCommand("Copy");
-                alert("已复制，可以进入游戏在宏命令中新建宏，然后CTRL+V粘贴进去了哦^-^!");
-            },
-            changeCommand: function(event) {
-                vue.$data.selectCommand = vue.$data.commands[vue.$data.selectCommandKey].name;
-                let key = vue.$data.selectCommandKey;
-                let val = vue.$data.commands[key];
-
-                // console.log(val.type);
-                let con = document.getElementById("condition");
-                if (val.type === '1' || val.type === 1) {
-                    con.style.display = "block";
-                } else {
-                    con.style.display = "none";
-                }
-            }
-        },
-        computed: {},
-        created: function() {
-            axios.post('/log/macroIndex', {
-            })
-                    .then(function(response) {
-                        // console.log(response);
-                    });
-        }
-    });
-</script>
+<script src="../js/macroIndex.js"></script>
 <script src="../js/data.js"></script>
-
 </body>
 </html>
