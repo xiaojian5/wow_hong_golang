@@ -3,58 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>宏工具-快速创建</title>
+    <title>宏工具</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/common.css">
-	<script src="../js/vue.min.js" ></script>
-	<script src="../js/axios.min.js" ></script>
-	<script>let type = "index";</script>
 </head>
 <body>
-<div class="container" id="container" flag="index">
-    {{template "header"}}
+<div class="container" id="container">
+    {{template "header" .page}}
     <div class="row" id="content">
-        <div class="form-group col-md-12">
-            <label>技能名称：</label>
-            <input type="text" class="form-control" v-model="skillName">
-        </div>
-        <div class="form-group col-md-12">
-            <label>技能类型：</label>
-            <select class="form-control" v-model="skillType">
-                <option v-for="item in skillTypeTable" v-bind:value="item.id">${item.name}$</option>
-            </select>
-        </div>
-        <div class="form-group col-md-12">
-            <button class="btn btn-info" v-on:click="fastCreate">快速创建</button>
-        </div>
-        <div class="col-md-12 table-responsive">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th class="col-md-1">#</th>
-                    <th class="col-md-6">宏文本</th>
-                    <th>描述信息</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="item1 in skillTable">
-                    <th scope="row">${item1.id}$</th>
-                    <td v-html="item1.text"></td>
-                    <td v-html="item1.desc"></td>
-                </tr>
-                <tr v-for="item2 in skillTableOfRemote">
-                    <th scope="row">${item2.id}$</th>
-                    <td>
-                        <pre>${item2.text}$</pre>
-                    </td>
-                    <td>${item2.desc}$</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
+		<h2>宏工具</h2>
+		<p>
+			欢迎使用宏制作及分享工具！
+			本工具旨在提供魔兽世界宏命令资料的分享及基础的教学。
+		</p>
     </div>
 </div>
-<script src="../js/index.js"></script>
 </body>
 </html>

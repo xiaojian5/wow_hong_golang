@@ -1,33 +1,34 @@
 {{define "header"}}
 <div class="row" id="header">
 	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
-					<span class="sr-only">Toggle</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">Macro</a>
-			</div>
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" onclick="toggle()">
+				<span class="sr-only">Toggle</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a id="index" class="navbar-brand" href="/">首页</a>
+		</div>
 
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li id="index"><a href="/">快速创建</a></li>
-					<li id="createSequence"><a href="/Macro/createSequence">创建技能循环</a></li>
-					<li id="macroIndex"><a href="/Macro/macroIndex">手动组合</a></li>
-					<li id="addMacro"><a href="/Macro/addMacro">分享你的宏</a></li>
-					<li id="macroList"><a href="/Macro/macroList">搜索</a></li>
-					<li id="info"><a href="/Macro/info">宏指南</a></li>
-				</ul>
-			</div><!-- /.navbar-collapse -->
-		</div><!-- /.container-fluid -->
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li id="macroCreate"><a href="/Macro/macroCreate">快速创建</a></li>
+				<li id="macroCtSequence"><a href="/Macro/macroCtSequence">创建技能循环</a></li>
+				<li id="macroByHand"><a href="/Macro/macroByHand">手动组合</a></li>
+				<li id="macroShare"><a href="/Macro/macroShare">分享你的宏</a></li>
+				<li id="macroList"><a href="/Macro/macroList">搜索</a></li>
+				<li id="macroInfo"><a href="/Macro/macroInfo">宏教程</a></li>
+				<li id="macroVerify"><a href="/Macro/macroVerify">维护/审核</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
 	</nav>
 </div>
 <script>
+	let page = "{{.}}"
+
 	function toggle() {
 		let flag = document.getElementById("navbar-collapse-1").style.display;
 		if (flag === "block") {
@@ -36,7 +37,11 @@
 			document.getElementById("navbar-collapse-1").style.display = "block";
 		}
 	}
-	document.getElementById(type).className = "active";
-</script>
 
+	if (page === "index") {
+		document.getElementById({{.}}).className = "home-active";
+	} else {
+		document.getElementById({{.}}).className = "active";
+	}
+</script>
 {{end}}

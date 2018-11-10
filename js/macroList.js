@@ -75,13 +75,4 @@ let vue = new Vue({
             alert("已复制^-^！");
         },
     },
-    created: function() {
-        axios.post('/log/macroList', {})
-            .then(function(response) {
-                // console.log(response);
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
-    }
 });

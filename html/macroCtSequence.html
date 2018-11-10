@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>宏工具-技能循环</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/common.css">
+	<script src="../js/vue.min.js" ></script>
+	<script src="../js/axios.min.js" ></script>
+</head>
+<body>
+<div class="container" id="container" >
+    {{template "header" .page}}
+    <div class="row" id="content">
+        <div class="col-md-12">
+            <label class="text-danger">Warning：正在测试中的功能，待完善中。。。</label>
+        </div>
+        <div class="col-md-12" id="btn_div" style="margin-top: 20px;">
+            <button class="btn btn-info" v-on:click="addTemp">增加一个技能框</button>
+            <button class="btn btn-info" v-on:click="create">创建技能循环</button>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-condensed" style="word-break:break-all; word-wrap:break-word;">
+                <thead>
+                <tr>
+                    <th class="col-md-1">#</th>
+                    <th class="col-md-6">宏文本</th>
+                    <th>描述信息</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="item1 in macros">
+                    <th scope="row">${item1.id}$</th>
+                    <td v-html="item1.text"></td>
+                    <td v-html="item1.desc"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script src="../js/{{.page}}.js"></script>
+</body>
+</html>
