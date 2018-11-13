@@ -173,7 +173,7 @@ let vue = new Vue({
 						}
 					})
 					.catch(function(error) {
-						console.log(error);
+						// console.log(error);
 					});
 			} else {
 				alert("请选择技能类型")

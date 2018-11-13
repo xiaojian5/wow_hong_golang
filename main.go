@@ -140,7 +140,7 @@ func getMacroList(c *gin.Context) {
 		ID:           id,
 		ProfessionID: professionId,
 		MasteryID:    masteryId,
-		Macro:        c.Param("macro"),
+		Macro:        c.DefaultQuery("macro", ""),
 		IsVerify:     isVerify,
 	}
 	result, err := modules.GetMacroList(macro)
