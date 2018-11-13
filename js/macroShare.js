@@ -62,6 +62,7 @@ let vue = new Vue({
                 .then(function(response) {
                     document.getElementById("title").value = "";
                     document.getElementById("macro").value = "";
+                    alert("分享成功，谢谢你的无私分享！");
                 });
         }
     },

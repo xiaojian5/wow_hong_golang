@@ -26,7 +26,7 @@ func main() {
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
 
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	router.LoadHTMLGlob(rootPath + "html/*")
 
@@ -143,7 +143,6 @@ func getMacroList(c *gin.Context) {
 		Macro:        c.Param("macro"),
 		IsVerify:     isVerify,
 	}
-	modules.Debug(macro)
 	result, err := modules.GetMacroList(macro)
 	if err != nil {
 		modules.CheckErr("getMacroList", err)
