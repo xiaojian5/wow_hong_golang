@@ -54,9 +54,12 @@ func CreateLog(ip string, method string) error {
 }
 
 func UpdateLog(id int, count int) error {
+	t := time.Now().Format("2006-01-02 15:04:05")
+
 	builder := sql_builder.Update(table)
 	builder.WhereEq("id", id)
 	builder.UpdateSet("count", count)
+	builder.UpdateSet("update_time", t)
 
 	conn := GetDbConn()
 	_, err := conn.Exec(builder.String(), builder.Args()...)
