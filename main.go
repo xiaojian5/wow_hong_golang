@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	port  int
+	port     int
 	tokenStr = "test"
 )
 
@@ -44,6 +44,9 @@ func main() {
 
 	// html
 	router.GET("/", Index)
+	router.GET("/html/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/")
+	})
 	router.GET("/Macro/:type", MacroIndex)
 
 	// data
