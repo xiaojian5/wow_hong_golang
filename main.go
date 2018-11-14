@@ -108,9 +108,9 @@ func MacroIndex(c *gin.Context) {
 		token, err := c.Cookie("token")
 		// 简单的权限验证
 		if err != nil || token != tokenStr {
-			c.JSON(http.StatusNotFound, gin.H{
-				"status": 404,
-				"error":  "404, page not exists!",
+			c.JSON(http.StatusForbidden, gin.H{
+				"status": 403,
+				"error":  "403, Forbidden!",
 			})
 		} else {
 			c.HTML(http.StatusOK, "macroVerify.html", gin.H{
