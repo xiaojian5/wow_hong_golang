@@ -19,10 +19,6 @@ This is a game tool for World of Warcraft players that provides players with a p
   - 提供给玩家一个分享自己收集的宏命令的功能，同时也可以搜索其他玩家分享的宏命令。
   -Provides the player with the ability to share the macro commands they have collected, as well as the macro commands shared by other players.
 
-# Install
-```
-go get -u github.com/illidan33/wow_hong_golang
-```
 # 优化
   由于服务器能力的问题，为了优化访问，所做的更改
 1. 把部分数据写死在html中，以减少客户端访问次数，提高服务器处理能力。
