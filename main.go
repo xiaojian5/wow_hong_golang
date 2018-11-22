@@ -13,6 +13,7 @@ import (
 	"flag"
 	"strings"
 	"math"
+	"os"
 )
 
 var (
@@ -21,7 +22,7 @@ var (
 )
 
 func main() {
-	rootPath := "/data/golang/go/src/github.com/illidan33/wow_hong_golang/"
+	rootPath := fmt.Sprintf("%s/src/github.com/illidan33/wow_hong_golang/", os.Getenv("GOPATH"));
 
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
