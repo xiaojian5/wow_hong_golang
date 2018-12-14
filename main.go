@@ -1,19 +1,19 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/illidan33/wow_hong_golang/modules"
-	"net/http"
-	"strconv"
 	"io/ioutil"
-	"encoding/json"
-	"time"
-	"fmt"
-	"flag"
-	"strings"
 	"math"
+	"net/http"
 	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
 var (
@@ -22,12 +22,15 @@ var (
 )
 
 func main() {
-	rootPath := fmt.Sprintf("%s/src/github.com/illidan33/wow_hong_golang/", os.Getenv("GOPATH"));
-
+	envPath := os.Getenv("GOPATH")
+	if envPath == "" {
+		envPath = "/test";
+	}
+	rootPath := fmt.Sprintf("%s/src/github.com/illidan33/wow_hong_golang/", );
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
 
-	//gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	router.LoadHTMLGlob(rootPath + "html/*")
 
