@@ -225,7 +225,6 @@ func CreateSequence(c *gin.Context) {
 		temps[i].SkillName = strings.Replace(value.SkillName, " ", "", -1)
 		temps[i].SkillName = strings.Replace(value.SkillName, "\n", "", -1)
 	}
-	fmt.Fprintf(gin.DefaultWriter, "%s : %+v\n", "test", temps)
 
 	macros, maxTime := modules.CreateSequence(temps)
 	maxTime = int(math.Ceil(float64(maxTime) / 100))
