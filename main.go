@@ -26,7 +26,7 @@ func main() {
 	if envPath == "" {
 		envPath = "/test";
 	}
-	rootPath := fmt.Sprintf("%s/src/github.com/illidan33/wow_hong_golang/", );
+	rootPath := fmt.Sprintf("%s/src/github.com/illidan33/wow_hong_golang/", envPath);
 	flag.IntVar(&port, "port", 8000, "listen port")
 	flag.Parse()
 
